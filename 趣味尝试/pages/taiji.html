@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>太极图</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		.box{
+			width: 100%;
+			height: 100vh;
+			background: radial-gradient(transparent,black);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.container{
+			width: 400px;
+			height: 400px;
+			position: relative;
+			overflow: hidden;
+			animation: rotate 6s linear infinite;
+		}
+		.left,.right{
+			float: left;
+			width: 50%;
+			height: 100%;
+			position: relative;
+		}
+		.left{
+			border-top-left-radius: 200px;
+			border-bottom-left-radius: 200px;
+			background-color: #fff;
+		}
+		.right{
+			border-top-right-radius: 200px;
+			border-bottom-right-radius: 200px;
+			background-color: #000;
+		}
+		.black_circle,.white_circle{
+			position: absolute;
+			width: 200px;
+			height: 200px;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.black_circle{
+			z-index: 1;
+			top: 0;
+			left: -50%;
+			background-color: #000;
+		}
+		.white_circle{
+			z-index: 2;
+			bottom: 0px;
+			right: -50%;
+			background-color: #fff;
+		}
+		.inner_circle{
+			display: block;
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+		}
+		.white_circle .inner_circle{
+			background-color: #000;
+		}
+		.black_circle .inner_circle{
+			background-color: #fff;
+		}
+		
+		@keyframes rotate{
+			0%{
+				transform: rotate(360deg);
+			}
+			100%{
+				transform: rotate(0deg);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<div class="left">
+				<div class="white_circle">
+					<span class="inner_circle"></span>
+				</div>
+			</div>
+			<div class="right">
+				<div class="black_circle">
+					<span class="inner_circle"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

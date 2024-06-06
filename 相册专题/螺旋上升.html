@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>相册</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/case2.css"/>
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<ul class="pics">
+				<li class="item"><img src="img/case2/1.jpg" ></li>
+				<li class="item"><img src="img/case2/2.jpg" ></li>
+				<li class="item"><img src="img/case2/3.jpg" ></li>
+				<li class="item"><img src="img/case2/4.png" ></li>
+				<li class="item"><img src="img/case2/5.jpg" ></li>
+				<li class="item"><img src="img/case2/7.jpg" ></li>
+				<li class="item"><img src="img/case2/8.jpg" ></li>
+				<li class="item"><img src="img/case2/9.jpg" ></li>
+				<li class="item"><img src="img/case2/10.jpg" ></li>
+				<li class="item"><img src="img/case2/11.jpg" ></li>
+				<li class="item"><img src="img/case2/12.jpg" ></li>
+				<li class="item"><img src="img/case2/13.jpg" ></li>
+				<li class="item"><img src="img/case2/14.jpg" ></li>
+				<li class="item"><img src="img/case2/15.jpg" ></li>
+				<li class="item"><img src="img/case2/16.jpg" ></li>
+				<li class="item"><img src="img/case2/17.jpg" ></li>
+				<li class="item"><img src="img/case2/18.jpg" ></li>
+				<li class="item"><img src="img/case2/19.jpg" ></li>
+				<li class="item"><img src="img/case2/20.png" ></li>
+				<li class="item"><img src="img/case2/21.jpg" ></li>
+				<li class="item"><img src="img/case2/22.jpg" ></li>
+				<li class="item"><img src="img/case2/23.jpg" ></li>
+				<li class="item"><img src="img/case2/24.jpg" ></li>
+				<li class="item"><img src="img/case2/25.png" ></li>
+				<li class="item"><img src="img/case2/26.jpg" ></li>
+				<li class="item"><img src="img/case2/28.jpg" ></li>
+				<li class="item"><img src="img/case2/27.jpg" ></li>
+				<li class="item"><img src="img/case2/6.jpg" ></li>
+				
+			</ul>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script type="text/javascript">
+		
+		let $img = $(".pics img"),
+			$pics = $(".pics .item"),
+			picLen = $pics.length,
+			$picBox = $(".pics");
+			
+		
+		// 1.根据图片大小设置li图片盒子大小
+		$picBox.css({
+			"height" : $($img[0]).height() + "px",
+		})
+		// 2.入场设置
+		let totalTime = 4;
+		let timeStep = (totalTime / picLen).toFixed(1);
+		
+		let maxScale = 1.4,
+			singlePicScale = (1.4/picLen).toFixed(2);
+		
+		let timer = null,
+			scale = [],
+			rotY = [],
+			tranY = [],
+			tranZ = [];
+		for(let i = 0; i < picLen; i++) {
+			scale.push(i*singlePicScale);
+			rotY.push(i*50);
+			tranY.push(650 - i*30);
+			tranZ.push(i*20);
+			$($pics[i]).css({
+											// 呈螺旋上升状态------图片旋转间距-----------------图片上下间距--------------------距离旋转轴的大小
+											// ------------------------↓---------------------------↓--------------------------------↓-------
+				"transform" : " scale("+i*singlePicScale+") rotateY("+i*50+"deg) translateY("+(650 - i*30)+"px) translateZ(" + ( i*20) + "px)",
+				"opacity" : 1,
+				"transitionDelay" : i*timeStep + "s"
+			})
+		}
+		setTimeout(function() {
+			$pics.css({"transition" : "none"});
+			timer = setInterval(function() {
+				for(let i = 0; i < picLen; i++) {
+					$($pics[i]).css({
+						// 呈螺旋上升状态------图片旋转间距-----------------图片上下间距--------------------距离旋转轴的大小
+						// ------------------------↓---------------------------↓--------------------------------↓-------
+						"transform" : "scale("+i*singlePicScale+") rotateY("+rotY[i]+"deg) translateY("+tranY[i]+"px) translateZ(" + tranZ[i] + "px)",
+					})
+					rotY[i] += 0.04;
+					tranZ[i] += 0.02;
+				}
+			},20)
+		},(picLen*timeStep + 2)*1000);//动画完成开启定时器
+	</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6解构赋值</title>
+	</head>
+	<body>
+	</body>
+	<script>
+		// 结构赋值分为数组结构和对象解构赋值
+			// 1.数组解构赋值左边必须与右边结构完全对应
+			let [a,b,c] = [12,5,8];
+			// 相当于let a = 12,b = 5, c = 8;
+			console.log(a);
+			console.log(b);
+			console.log(c);
+			// 2.对象解构赋值，
+			// 对象解构作用时间上就是从某一个对象中取数据，右边的对象可比左边的数据长
+			let obj = {
+				name : "zs",
+				age : 21,
+				sex : "男",
+			}
+			// 对象解构左边中的变量名右边对象必须要具有才行，不然获取不到
+			let {name,sex} = obj;
+			console.log(name);
+			console.log(sex);
+			
+	</script>
+</html>

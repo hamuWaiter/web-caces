@@ -1,0 +1,54 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+.box {
+	/* width: 80%; */
+	width: 100%;
+	height: 100vh;
+	position: relative;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.container span {
+	display: block;
+	position: absolute;
+	transition: transform 0.4s linear;
+
+	/* 默认不显示 */
+	transform: scale(0);
+}
+
+.container.on span {
+	transform: scale(1);
+}
+
+.controller span {
+	display: block;
+	border-width: 20px;
+	border-style: solid;
+	position: absolute;
+	top: 50%;
+	z-index: 100;
+	transform: translateY(-50%);
+	cursor: pointer;
+}
+
+.controller .pre {
+	left: 10px;
+	border-color: transparent #000 transparent transparent;
+}
+
+.controller .next {
+	right: 10px;
+	border-color: transparent transparent transparent #000;
+}

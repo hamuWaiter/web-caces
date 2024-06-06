@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>for in/of循环遍历数组或对象</title>
+	</head>
+	<body>
+		<script>
+			// for...in可以用于遍历数组或是对象，for...of暂时只能用于遍历数组
+			let arr = ["zs","ls","wu"];
+			let obj = {
+				name : "zs",
+				age : 21,
+				sex : "男"
+			};
+			
+			console.log("数组for in循环:");
+			// for...in for...of循环数组：
+			for(let i in arr){
+				// for...in是对数组索引进行循环
+				console.log(i,arr[i]);
+			}
+			console.log("数组for of循环:");
+			for(let value of arr) {
+				// for...of是对值进行循环
+				console.log(value);
+			}
+			console.log("对象for in循环:");
+			for(let i in obj) {
+				// 对象for...in中i是对象的key（属性名）
+				console.log(i,obj[i]);
+			}
+			console.log("对象for of循环暂不被支持");
+			// for(let i of obj) {
+			// 	console.log(i);
+			// }
+		</script>
+	</body>
+</html>

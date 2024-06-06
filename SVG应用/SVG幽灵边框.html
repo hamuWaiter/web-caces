@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG幽灵边框</title>
+		<style>
+			div {
+
+				width: 320px;
+				height: 150px;
+				background-color: #0094ff;
+				margin: 100px auto;
+			}
+
+			path {
+				stroke: pink;/*描边*/
+				fill: none;/*填充*/
+				stroke-width: 3;
+				stroke-dasharray: 880px;/* 总共绘制的长度 */
+				stroke-dashoffset: 880px;/* 剩余未绘制的长度 */
+				transition: 1s;
+
+			}
+
+			div:hover path {
+				stroke-dashoffset: 0px;/* 剩余未绘制的长度变为0 */
+			}
+		</style>
+
+	</head>
+	<body>
+		<div>
+			<svg width="320" height="150">
+				<path d="M 10 10 h 300 v 130 h -300 Z"/>
+			</svg>
+		</div>
+	</body>
+</html>

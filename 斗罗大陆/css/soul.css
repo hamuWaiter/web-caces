@@ -1,0 +1,80 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+.box{
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	background: url(../img/bgs/20.jpg) center center no-repeat;
+	perspective: 800px;
+}
+
+.container {
+	width: 40%;
+	position: relative;
+	height: calc(100vw*0.4);
+	transform-style: preserve-3d;
+	/* transform: rotateX(70deg); */
+	/* animation: soulCircle 10s linear infinite; */
+	animation: soulCircle 30s linear infinite;
+}
+
+.container img {
+	position: absolute;
+	width: 100%;
+}
+
+.container img:nth-child(1) {
+	transform: scale(4) rotateZ(0deg);
+}
+
+.container img:nth-child(2) {
+	transform: scale(3) rotateZ(45deg);
+}
+
+.container img:nth-child(3) {
+	transform: scale(2.2) rotateZ(90deg);
+}
+
+.container img:nth-child(4) {
+	transform: scale(1.6) rotateZ(135deg);
+}
+
+.container img:nth-child(5) {
+	transform: scale(1.3) rotateZ(180deg);
+}
+
+.container img:nth-child(6) {
+	transform: scale(1) rotateZ(225deg);
+}
+
+.container img:nth-child(7) {
+	transform: scale(0.8) rotateZ(225deg);
+}
+
+.container img:nth-child(8) {
+	transform: scale(0.6) rotateZ(225deg);
+}
+
+.container img:nth-child(9) {
+	transform: scale(0.4) rotateZ(225deg);
+}
+
+@keyframes soulCircle {
+	0% {
+		transform: rotateX(70deg) rotateZ(0deg);
+	}
+
+	50% {
+		transform: rotateX(70deg)rotateZ(180deg);
+	}
+
+	100% {
+		transform: rotateX(70deg)rotateZ(360deg);
+	}
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>canvas渐变字特效</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			body {
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- canvas的宽高不能通过css设置，要通过属性设置！！！！ -->
+		<canvas id="myCanvas">您的浏览器不支持canvas，请更换浏览器</canvas>
+	</body>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		let canvas = $("#myCanvas"),
+			// getContext是原生的js方法，要将jq对象转换为原生对象再调用
+			ctx = canvas[0].getContext("2d"),
+			width = $(window).width(),
+			height = $(window).height();
+		
+		canvas.css({
+			"backgroundColor" : "#000"
+		})
+		canvas.attr({
+			"width" : width,
+			"height" : height
+		});
+		window.onresize = () => {
+			width = $(window).width();
+			height = $(window).height();
+			canvas.attr({
+				"width" : width,
+				"height" : height
+			});
+		}
+		function randomColor(){
+			return `rgba(${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},1)`
+		}
+		//创建渐变
+		let grdNum = 10,
+			colorArr = [
+				"rgba(195,129,91,1)",
+				"rgba(157,156,42,1)",
+				"rgba(144,60,205,1)",
+				"rgba(16,233,79,1)",
+				"rgba(197,21,65,1)",
+				"rgba(146,185,246,1)",
+				"rgba(21,21,152,1)",
+				"rgba(243,73,33,1)",
+				"rgba(195,149,106,1)",
+				"rgba(231,224,50,1)"
+			];
+			
+		function gradientMove(grdPosition) {
+		// 创建渐变时，后面两个参数用于控制渐变的角度
+			ctx.clearRect(0,0,width,height);
+			let gradient = ctx.createLinearGradient(grdPosition, 0, width, 0);
+			for(let i in colorArr){
+				gradient.addColorStop(i*0.1, colorArr[i]);
+			}
+			ctx.fillStyle = gradient;
+			
+			ctx.font = "30px arial blod";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("视频加载中......0s",width/2,height/2);
+			
+		}
+		let position = 0,//绘制渐变的开始位置
+			//渐变绘制位置的最大值 
+			max = Math.floor(width/2-200),
+			// 绘制方向，true为增，false为减
+			isInc =true;
+		
+		setInterval(()=>{
+			if(position < max && isInc){
+				position += 4;
+			}else if(position >= max){
+				isInc = false;
+			}
+			
+			if(position > 0 && !isInc){
+				position -= 4;
+			}else if(position <= 0){
+				isInc = true;
+			}
+			gradientMove(position);
+		},16);
+		
+	</script>
+</html>

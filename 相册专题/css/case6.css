@@ -1,0 +1,110 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+ul li {
+	list-style: none;
+}
+
+.box {
+	width: 100vw;
+	height: 100vh;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	perspective: 1200px;
+}
+
+.container .picBox {
+	width: 60%;
+	height: 90%;
+	position: relative;
+	transform-style: preserve-3d;
+	position: relative;
+	transform: rotateX(60deg);
+}
+
+.picBox li {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	right: 0;
+	transform-origin: left;
+	transition: all 1s ease-in-out;
+	background-color: antiquewhite;
+}
+
+.picBox .decoration-top,
+.picBox .decoration-bottom {
+	width: 54%;
+	height: 60px;
+	border-radius: 100px 0 0 100px;
+}
+
+.picBox .decoration-top {
+	bottom: 100%;
+	transform-origin: bottom;
+	background-color: brown;
+	transform: rotateX(120deg);
+}
+
+.picBox .decoration-bottom {
+	top: 100%;
+	transform-origin: top;
+	transform: rotateX(-60deg);
+	overflow: hidden;
+}
+
+.picBox .decoration-bottom::before {
+	position: absolute;
+	content: "";
+	padding: 30px;
+	border-radius: 50%;
+	right: 0;
+	transform: translateX(50%);
+	background-color: #fff;
+}
+
+.picBox .decoration-center {
+	width: 100px;
+	height: 100%;
+	background-color: brown;
+	right: calc(54% - 100px);
+	transform: translateZ(-30px);
+}
+
+.picBox .bg {
+	background-color: antiquewhite;
+}
+
+
+/* 控件 */
+.controller {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+.controller span {
+	display: block;
+	position: absolute;
+	width: 50%;
+	height: 100%;
+	cursor: pointer;
+}
+
+.controller .pre {
+	left: 0;
+}
+
+.controller .next {
+	right: 0;
+}

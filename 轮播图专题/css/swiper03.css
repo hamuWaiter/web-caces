@@ -1,0 +1,80 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+ul li {
+	list-style: none;
+}
+
+.box {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+}
+
+.container {
+	width: 80%;
+	height: 100%;
+	position: relative;
+}
+.container .replay{
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border-radius: 50% 0 0 50%;
+	background-color: #000;
+	z-index: 100;
+	bottom: 0;
+	right: 0;
+	cursor: pointer;
+}
+.container .replay:before{
+	content: "";
+	border-width: 10px;
+	border-style: solid;
+	border-color: #f00 transparent transparent transparent;
+	position: absolute;
+	top: 30%;
+	left: 40%;
+	transform: rotateZ(-90deg);
+}
+.picitem li {
+	background-color: rgba(0, 0, 0, .4);
+}
+
+.picitem li:nth-child(2n) {
+	top: 100%;
+}
+
+.picitem li:nth-child(2n+1) {
+	bottom: 100%;
+}
+
+.picitem.on li:nth-child(2n) {
+	top: 0;
+}
+
+.picitem.on li:nth-child(2n+1) {
+	bottom: 0;
+}
+
+.controller span {
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	border-width: 20px;
+	border-style: solid;
+	cursor: pointer;
+}
+
+.controller .pre {
+	border-color: transparent #f00 transparent transparent;
+	left: 20px;
+}
+
+.controller .next {
+	border-color: transparent transparent transparent #f00;
+	right: 20px;
+}

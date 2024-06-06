@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES7的新特性盘点</title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			.second{
+				color: indianred;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<h1 class="second"></h1>
+		</div>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+		// 1.检验数组是否包含某个东西
+			let fruits = ["香蕉","苹果","梨","芒果","榴莲","西瓜","草莓"];
+			console.log(fruits.includes("西红柿"));//返回布尔值，代表是否有找到
+			console.log(fruits.includes("梨"));//返回布尔值，代表是否有找到
+		
+		// 2.求幂运算写法简化
+			// ES5求幂：
+			let es5Pow = Math.pow(3,3);//3的3次方
+			// ES6求幂
+			let es6Pow = 3**3;//3的3次方
+			console.log(es5Pow,es6Pow);
+			
+		// 3.ES7字符串新方法
+		let curDate = new Date();
+		let curSecond = curDate.getSeconds();
+		let $showEl = $(".second");
+		setInterval(()=>{
+			curDate = new Date();
+			curSecond = curDate.getSeconds();
+			$showEl.text(curSecond.toString().padStart(3,"0"));
+		},1000);
+		</script>
+	</body>
+</html>

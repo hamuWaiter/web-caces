@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>拖拽魔方</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		ul li{
+			list-style: none;
+		}
+		body::-webkit-scrollbar{
+			display: none;
+		}
+		.box{
+			perspective: 1200px;
+		}
+		.imgs{
+			width: 300px;
+			height: 300px;
+			margin: 200px auto;
+			transform-style: preserve-3d;
+			position: relative;
+			transform: rotateX(-20deg) rotateY(20deg);
+			/* border: 1px solid red; */
+		}
+		.imgs li{
+			width: 300px;
+			height: 300px;
+			overflow: hidden;
+			display: block;
+			position: absolute;
+			background-color: rgba(0,0,0,.4);
+			box-shadow: 0 0 20px #025C64;
+		}
+		img{
+			width: 100%;
+			display: block;
+		}
+		li:nth-child(1){
+			transform: rotateY(0deg) translateZ(150px);
+		}
+		li:nth-child(2){
+			transform: rotateY(90deg) translateZ(150px);
+		}
+		li:nth-child(3){
+			transform: rotateY(0deg) translateZ(-150px);
+		}
+		li:nth-child(4){
+			transform: rotateY(-90deg) translateZ(150px);
+		}
+		li:nth-child(5){
+			transform: rotateX(90deg) translateZ(150px);
+		}
+		li:nth-child(6){
+			transform: rotateX(-90deg) translateZ(150px);
+		}
+	</style>
+</head>
+<body ondragstart="return false">
+	<div class="box">
+		<ul class="imgs">
+			<li>
+				<img src="images/1%20(1).jpeg" >
+			</li>
+			<li>
+				<img src="images/1%20(1).jpg" >
+			</li>
+			<li>
+				<img src="images/1%20(2).jpeg" >
+			</li>
+			<li>
+				<img src="images/1%20(2).jpg" >
+			</li>
+			<li>
+				<img src="images/1%20(3).jpg" >
+			</li>
+			<li>
+				<img src="images/1%20(4).jpg" >
+			</li>
+		</ul>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		let $box = $(".imgs");
+		// console.log($box)
+		let originDisX = 20,
+			originDisY = -20,
+			realX = 0,
+			realY = 0;
+		$box.on("mousedown",function(e){
+			
+			let pressPositionX = e.pageX,//鼠标按下的位置
+				pressPositionY = e.pageY,
+				changeDisX = 0,
+				changeDisY = 0;
+			$box.on("mousemove",function(e){
+				
+				changeDisX = e.pageX - pressPositionX;
+				changeDisY = e.pageY - pressPositionY;
+				realX = originDisX + changeDisX;
+				realY = originDisY + changeDisY;
+				$box.css({
+					"transform":"rotateX("+realY+"deg) "+"rotateY("+realX+"deg)"
+				})
+			})
+			$box.on("mouseup",function(){
+				originDisX = realX;//记录鼠标松开的位置才能无缝拖拽
+				originDisY = realY;
+				$box.off("mousemove"); //解绑box的鼠标移动事件
+			})
+			
+			$box.on("mouseleave",function(){
+				originDisX = realX;//记录鼠标松开的位置才能无缝拖拽
+				originDisY = realY;
+				$box.off("mousemove"); //解绑box的鼠标移动事件
+			})
+		})
+	</script>
+</body>
+</html>

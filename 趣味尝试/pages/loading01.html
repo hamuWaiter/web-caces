@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>中国风加载页面</title>
+	<link rel="stylesheet" href="../css/loading01.css">
+	<script src="../js/jquery-3.4.1.js"></script>
+</head>
+<body>
+	<div class="box">
+		<div class="loading-box">
+			<!-- 太阳 -->
+			<div class="sun"></div>
+			<!-- 文本 -->
+			<div class="txt-box">
+				<p class="loading-txt">页面加载中,客官请稍候&nbsp; ●◡●</p>
+			</div>
+			<!-- 山 -->
+			<ul class="mountainBox left">
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+			</ul>
+			<ul class="mountainBox right">
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		$(function(){
+			
+			let $box = $(".loading-box");
+			let waveSize = 50;  //一排波浪成员的尺寸
+			let waveNum = Math.round($box.height() / 60);//每一排波浪竖直间隔20px,由于从波浪盒子下方70%处开始排列，
+			// 所以整个盒子高度除以60（随便设的）而不是20即是将波浪盒子下部填满所需的波浪数目
+			let totalWidth = $(window).width();
+			let waveStartY = Math.floor($(window).height()/1.3);
+			// 撑满全屏的一个波浪需要的成员个数
+			let waveMemberNum = Math.round(totalWidth / waveSize) + 10;
+			
+			// 1.生成波浪元素
+			for(let i = 0; i < waveNum; i++) {
+				
+				let waveLeft = 170 + (i%2)*26;  //每个波浪距离波浪盒子左边的水平距离
+				let waveTop = i*14;//每隔波浪的垂直距离为20px
+			    //生成一排波浪 
+				// let el = $('<ul class="waveBox" style="left:-'+waveLeft+
+				// 'px;transform:translateY('+waveTop+
+				// 'px);"></ul>');
+				let el = $('<ul class="waveBox" style="left:-'+waveLeft+
+				'px;top:'+(waveStartY+waveTop)+
+				'px;animation-duration:'+(5 - i*0.2)+'s;"></ul>');
+				
+				for(let j = 0; j < waveMemberNum; j++) {
+					// 生成波浪成员
+					let waveMemberEl = $('<li class="wave" style="width:'+waveSize+
+					'px;height:'+waveSize+
+					'px;"><span></span><span></span><span></span><span></span><span></span></li>');
+					el.append(waveMemberEl);
+				}
+				
+				$box.append(el);
+			}
+			
+		});
+	</script>
+</body>
+</html>

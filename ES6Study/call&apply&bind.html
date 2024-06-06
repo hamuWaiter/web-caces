@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6变量声明let/const</title>
+	</head>
+	<body>
+		<button>按钮1</button>
+		<button>按钮2</button>
+		<button>按钮3</button>
+		<button>按钮4</button>
+		<button>按钮5</button>
+		<button>按钮6</button>
+		<button>按钮7</button>
+		<button>按钮8</button>
+		<button>按钮9</button>
+		<button>按钮10</button>
+		<script>
+		// 1.let/const具有块级作用域，只能在当前作用域生效，
+		// 且不能在同一作用域重复声明。
+			
+			let a = 10;
+			// let a = 20;//报错
+			a=30;//可重新赋值
+			console.log(a);
+			
+			const PI = 3.1415926;//常量通常都是全大写
+			// PI = 3.14;//常量不可修改
+			console.log(PI)
+
+
+		// 经典问题，循环绑定按钮点击事件，当点击时输出其对应的索引
+			//var:
+			var btnArr = document.querySelectorAll("button");
+
+			// for(var i = 0; i < btnArr.length; i++) {
+			//  btnArr[i].onclick = function() {
+			// 	// 所有按钮点击输出都为10，因为var没有块级作用域，
+			// 	// 绑定事件时的i无法保存，所有事件绑定完成后i=10。。
+			// 	 console.log(i);
+			//  }
+			// }
+		// 解决方案1：闭包
+			//原理，ES5中函数具有作用域，用函数将事件绑定代码包裹起来，并传入索引用index接收。 
+			// for (var i = 0; i < btnArr.length; i++) {
+			// 	(function(index){
+			// 		btnArr[i].onclick = function() {
+			// 			// 所有按钮点击输出都为10，因为var没有块级作用域，
+			// 			// 绑定事件时的i无法保存，所有事件绑定完成后i=10。。
+			// 			console.log(index+1);
+			// 		}
+			// 	})(i);
+			// }
+
+		// 终极方案：let
+			for (let i = 0; i < btnArr.length; i++) {
+				btnArr[i].onclick = function() {
+					// 所有按钮点击输出都为10，因为var没有块级作用域，
+					// 绑定事件时的i无法保存，所有事件绑定完成后i=10。。
+					console.log(i + 1);
+				};
+			}
+			// 如果循环变量通过var声明，则这儿i=10，如果用let声明则访问不到i
+			// console.log(i);
+		</script>
+	</body>
+</html>

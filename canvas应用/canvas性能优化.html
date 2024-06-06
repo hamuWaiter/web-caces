@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>canvas性能优化</title>
+		<style>
+		</style>
+	</head>
+	<body>
+		<script>
+			// 性能贴士:
+			// 1. 在离屏canvas上预渲染相似的图形或重复的对象
+				// 如果发现自己在每个动画帧上重复了一些相同的绘制操作，
+				// 请考虑将其分流到屏幕外的画布上。 然后，您可以根据需要频
+				// 繁地将屏幕外图像渲染到主画布上，而不必首先重复生成该图
+				// 像的步骤。
+					// 例如:
+					// myEntity.offscreenCanvas = document.createElement("canvas");
+					// myEntity.offscreenCanvas.width = myEntity.width;
+					// myEntity.offscreenCanvas.height = myEntity.height;
+					// myEntity.offscreenContext = myEntity.offscreenCanvas.getContext("2d");
+					
+					// myEntity.render(myEntity.offscreenContext);
+			
+			// 2. 避免浮点数的坐标点，用整数取而代之
+				// 当你画一个没有整数坐标点的对象时会发生子像素渲染。
+				// ctx.drawImage(myImage, 0.3, 0.5);
+			
+			// 3. 不要在用drawImage时缩放图像
+				// 在离屏canvas中缓存图片的不同尺寸，而不要用drawImage()去缩放它们。
+			
+			// 4. 使用多层画布去画一个复杂的场景
+			// 在您的应用程序中，您可能会发现某些对象需要经常移动或更改，而其他对象则保持相对静
+			// 态。 在这种情况下，可能的优化是使用多个<canvas>元素对您的项目进行分层。
+		
+			// 5. 用CSS设置大的背景图
+			// 如果像大多数游戏那样，你有一张静态的背景图，用一个静态的<div>元素，结合background
+			// 特性，以及将它置于画布元素之后。这么做可以避免在每一帧在画布上绘制大图。
+		
+			// 6. 用CSS transforms特性缩放画布
+			// CSS transforms 使用GPU，因此速度更快。 最好的情况是不直接缩放画布，或者具有较小
+			// 的画布并按比例放大，而不是较大的画布并按比例缩小。
+		
+			// 7. 关闭透明度
+			// 如果你的游戏使用画布而且不需要透明，当使用 HTMLCanvasElement.getContext() 
+			// 创建一个绘图上下文时把 alpha 选项设置为 false 。这个选项可以帮助浏览器进行内部优化。
+			// var ctx = canvas.getContext('2d', { alpha: false });
+		
+			// 更多的贴士:
+			// 将画布的函数调用集合到一起（例如，画一条折线，而不要画多条分开的直线）
+			// 避免不必要的画布状态改变
+			// 渲染画布中的不同点，而非整个新状态
+			// 尽可能避免 shadowBlur特性
+			// 尽可能避免text rendering
+			// 尝试不同的方法来清除画布(clearRect() vs. fillRect() vs. 调整canvas大小)
+			//  有动画，请使用window.requestAnimationFrame() 而非window.setInterval()
+				// requestAnimationFrame用法：
+				// https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Basic_animations
+			// 请谨慎使用大型物理库
+		
+		</script>
+	</body>
+</html>

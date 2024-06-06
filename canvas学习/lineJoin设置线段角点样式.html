@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="canvas" width="500" height="300"></canvas>
+	</body>
+	<script>
+		function draw() {
+		  var ctx = document.getElementById('canvas').getContext('2d');
+		  var lineJoin = ['round', 'bevel', 'miter'];
+		  ctx.lineWidth = 10;
+		  for (var i = 0; i < lineJoin.length; i++) {
+		    ctx.lineJoin = lineJoin[i];
+		    ctx.beginPath();
+		    ctx.moveTo(5, 5 + i * 80);
+		    ctx.lineTo(45, 45 + i * 80);
+		    ctx.lineTo(85, 5 + i * 80);
+		    ctx.lineTo(125, 45 + i * 80);
+		    ctx.lineTo(165, 5 + i * 80);
+			ctx.font = "20px arial"
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("lineJoin="+lineJoin[i],
+			260,20 + i * 80);
+		    ctx.stroke();
+		  }
+		}
+		draw();
+	</script>
+</html>

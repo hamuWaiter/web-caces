@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG变换</title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<?xml version="1.0" standalone="no"?>
+		
+		<svg width="800" height="800" version="1.1" xmlns="http://www.w3.org/2000/svg">
+			<!-- SVG变换是通过transform属性设置的 -->
+			<!-- 1.旋转中心是屏幕左上角 -->
+			<path d="M 0 0 h 80 v 80 h -80 Z"
+			fill="transparent" stroke="black"
+			transform="rotate(15)"/>
+			
+			<!-- 2.移动 -->
+			<path d="M 100 100 h 80 v 80 h -80 Z" 
+			fill="transparent" stroke="black"
+			transform="translate(20,0)"/>
+			
+		</svg>
+	</body>
+</html>

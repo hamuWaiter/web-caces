@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>上下滑入轮播图</title>
+	<link rel="stylesheet" href="./css/swiper03.css">
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<div class="replay">
+			</div>
+		</div>
+		<div class="controller">
+			<span class="pre"></span>
+			<span class="next"></span>
+		</div>
+		
+	</div>
+</body>
+<script src="./js/jquery-3.4.1.js"></script>
+<script src="./js/swiper03.js"></script>
+<script>
+	let img = [],
+		box = $(".container"),
+		pre = $(".controller .pre"),
+		next = $(".controller .next"),
+		replay = $(".replay");
+	
+	for(let i = 0; i < 4; i++) {
+		let str = "img/swiper03/"+(i+1)+".jpg";
+		img.push(str)
+	}
+	slideUpDown(img,box,pre,next,replay);
+</script>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>canvas绘图</title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			body{
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+	</body>
+	<script>
+		let canvas = document.getElementById("canvas"),
+			ctx = canvas.getContext("2d"),
+			width = window.innerWidth,
+			height = window.innerHeight;
+		
+		// 设置画布宽高
+		canvas.width = width;
+		canvas.height = height;
+			
+		// 1.简单的颜色填充
+		function fillColor() {
+			ctx.fillStyle = "#FD8403";
+			ctx.fillRect(0,0,width,height);
+		}
+		fillColor();
+		
+		// 2.canvas绘制路径
+			// 2.1 直线绘制
+		function drawLine() {
+			ctx.moveTo(0,0);//直线开始绘制的位置
+			ctx.lineTo(width/2,height/2);//直线终点
+			ctx.stroke();//绘制直线
+		}
+		// drawLine();
+			// 2.2 绘制圆形或带颜色的圆
+		function drawCircle() {
+			
+			// arc(x,y,r,start,stop) 圆心、半径、起始角、终点角
+			ctx.beginPath();
+			ctx.arc(width/2,height/2,300,0,2*Math.PI);
+			// 绘制圆环
+			ctx.stroke();
+			// 填充圆
+			// ctx.fillStyle = "#FD8403";//填充颜色
+			// ctx.fill();//填充
+		}
+		// drawCircle();
+			
+		
+			// 3.绘制渐变文字
+		function drawGradientText() {
+			// 渐变可以填充在矩形, 圆形, 线条, 文本等等, 各种形状可以自己定义不同的颜色
+			let gradient,
+				textColor = "#FD8403";
+			
+			
+			// 3.3 创建渐变（线条渐变、径向、圆形渐变）
+			// createLinearGradient(x,y,x1,y1) - 创建线条渐变
+			// createRadialGradient(x,y,r,x1,y1,r1) - 创建一个径向/圆渐变
+			// addColorStop()方法指定颜色停止，参数使用坐标来描述，可以是0至1.
+			// 使用渐变，设置fillStyle或strokeStyle的值为 渐变，然后绘制形状，如矩形，文本，或一条线。
+		
+				//创建渐变
+				//	线性渐变
+			 // gradient = ctx.createLinearGradient(0,0,width,height);
+				//	径向渐变
+			 gradient = ctx.createRadialGradient(width/2,height/2,100,width/2,height/2,400);
+			 gradient.addColorStop(0,"red");
+			 gradient.addColorStop(0.5,"yellow");
+			 gradient.addColorStop(1,"red");
+	//3.1 填充渐变
+			// ctx.fillStyle = gradient;
+			// ctx.fillRect(0,0,width,height);
+	
+	//3.2 文字渐变		
+			ctx.font = "200px 宋体";
+			// 文字水平居中....
+			ctx.textAlign = "center";
+			ctx.fillStyle = gradient;//填充颜色
+			// 3.1 实心文本
+			ctx.fillText("canvas",width/2,height/2);
+			// 3.2 空心文本
+			// ctx.strokeText("canvas",0,100);
+		}
+		// drawGradientText();
+		
+		
+		// 4.图像文字
+		let img = new Image(),
+		pattern = ctx.createPattern(img, "repeat");
+		
+		img.src = "../images/onepeice.jpg";
+		
+		img.onload = function() {
+			//必须要在图像加载完成后绘制才有效
+		
+			pattern = ctx.createPattern(img, "repeat");
+			ctx.font = "200px arial blod";
+			ctx.textAlign = "center";
+			ctx.fillStyle = pattern;
+			ctx.fillText("ONE PIECE", width/2, height/2);
+			ctx.strokeText("ONE PIECE", width/2+4, height/2+4);
+		};
+		drawImage();
+		
+		
+		
+		// 5. canvas绘制图像（picture）
+		
+		function drawImage() {
+			// drawImage(image,x,y)
+			// 向canvas画布中置入图像
+			
+			// ctx.strokeText(text, 65, 450);
+		}
+	</script>
+</html>

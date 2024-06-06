@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG三次贝塞尔曲线</title>
+	</head>
+	<body>
+		<?xml version="1.0" standalone="no"?>
+		
+		<svg width="190px" height="160px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		  <!-- 1.C
+		   三次贝塞尔曲线命令-->
+		   
+		   <!-- 三次贝塞尔曲线需要定义一个点和两个控制点，所以用C命令创建三次贝塞尔曲线，
+		   需要设置三组坐标参数 -->
+		  <path d="M10 10 C 20 20, 40 20, 50 10" fill="transparent" stroke="black"/>
+		  
+		 <!-- S命令可以用来创建与前面一样的贝塞尔曲线，但是，如果S命令跟在一个C或S命令后面，则它的第
+		  一个控制点会被假设成前一个命令曲线的第二个控制点的中心对称点。如果S命令单独使用，前面
+		  没有C或S命令，那当前点将作为第一个控制点。下面是S命令的语法示例，图中左侧红色标记的点
+		  对应的控制点即为蓝色标记点。 -->
+		  <path d="M60 10 S 80 30,110 10" fill="transparent" stroke="black"/>
+		  <path d="M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80" stroke="black" fill="transparent"/>
+		
+		</svg>
+	</body>
+</html>

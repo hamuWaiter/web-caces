@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6之promise</title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.loading{
+				width: 200px;
+				height: 200px;
+				border: 2px solid aquamarine;
+				border-radius: 50%;
+				margin-bottom: 40px;
+				text-align: center;
+				line-height: 200px;
+			}
+			.process{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.pro-bar{
+				width: 800px;
+				height: 20px;
+				border:1px solid aquamarine;
+			}
+			.pro-bar span{
+				display: block;
+				width: 0%;
+				height: 100%;
+				background-color: aquamarine;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="process">
+				<div class="loading"></div>
+				<div class="pro-bar">
+					<span></span>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+			// promise是异步编程的解决方案
+			//1.最基本的用法：
+			let myPromise = new Promise(function(resolve, reject) {
+				setTimeout(() => {
+					resolve("resolved!");
+				}, 1000);
+			})
+
+			let result = myPromise.then((res) => {
+				console.log(res);
+			})
+
+			//2.封装Promise
+			function createPromise(testStatus,testTime) {
+				// 返回一个Promise对象
+				return new Promise(function(resolve, reject) {
+					setTimeout(() => {
+						testStatus ? resolve("resolved!"):resolve("rejected!");
+					}, testTime);
+				})
+			}
+			let testRes = createPromise(false,1000).then((res)=>{
+				// 成功的回调
+				console.log(res)
+			},
+			// (err)=>{
+			// 	// 失败的回调,也可通过catch来捕获
+			// 	console.log(err)
+			// }
+			).catch((err)=>{
+				console.log(err);
+			})
+			
+			testRes.finally(()=>{
+				// finally不管异步执行失败或是成功都会执行
+				console.log("Promise执行完成！");
+			})
+			
+			
+			// Promise.all()方法可接收一个包含多个promise对象的数组，
+			// 当数组中所有的请求都执行完成后就进入.then执行回调
+			// Promise.all([
+			// 	// promise.all()不存在失败回调
+			// 	createPromise(true,500),
+			// 	createPromise(true,100),
+			// 	createPromise(true,1000),
+			// 	createPromise(false,400),
+			// 	createPromise(true,4000),
+			// 	createPromise(true,40)
+			// ]).then(res=>{
+			// 	console.log(res);
+			// },err=>{
+			// 	console.log(err)
+			// })
+			
+	// 模拟图片请求并加载进度条
+			let reqArr = [];
+			// 读取本地数据
+			let successNum = 0;
+			let $bar = $(".pro-bar span");
+			let $txt = $(".loading");
+			$txt.text("已加载了0张图片");
+			for(let i = 0; i < 6; i++) {
+				// 浏览器查看时调整network为fast 3G或slow 3G便于观察
+				let p = new Promise((resolve,reject)=>{
+					let img = new Image();
+					img.src = "./img/"+(i+1)+".jpg";
+					img.onload = ()=>{
+						successNum += 1;
+						$bar.css({
+							"width" : Math.round((successNum/6)*100)+"%"
+						});
+						$txt.text("已加载了"+successNum+"张图片");
+						resolve(img.src);
+					}
+				})
+				reqArr.push(p);
+			}
+			
+			Promise.all(reqArr).then(res=>{
+				console.log("本地图片数据加载完成！！！！！！！");
+			})
+			
+		</script>
+	</body>
+</html>

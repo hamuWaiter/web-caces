@@ -1,0 +1,250 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+ul{
+	list-style: none;
+}
+button{
+	border: none;
+	outline: none;
+}
+img{
+	width: 100%;
+}
+body{
+	user-select: none;
+}
+.box{
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	/* background: url(../img/云萧.jpg) center center no-repeat; */
+	background-size: cover;
+}
+.bg-img{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	perspective: 800px;
+}
+.bounce-bg{
+	width: 120%;
+	transform-origin: center;
+	transform-style: preserve-3d;
+	position: absolute;
+	opacity: 0;
+	transition: opacity 1s ease;
+}
+.on{
+	opacity: 1;
+}
+.img-container{
+	width: 400px;
+	height: 400px;
+	perspective: 800px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	/* 注意要加单位! */
+}
+.imgs{
+	width: 300px;
+	height: 300px;
+	position: absolute;
+	transform-style: preserve-3d;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: rotateX(0deg) rotateY(0deg);
+}
+.imgs li{
+	position: absolute;
+}
+.cai-lin{
+	/* width: 100px;
+	height: 100px; */
+	width: 33.3%;
+}
+.yun-zhi{
+	/* width: 200px;
+	height: 200px; */
+	width: 66.6%;
+}
+
+/* 内层相册 */
+.imgs li:nth-child(1){
+	transform: rotateY(0deg) translateZ(50px);
+}
+.imgs li:nth-child(2){
+	transform: rotateY(90deg) translateZ(50px);
+}
+.imgs li:nth-child(3){
+	transform: rotateY(180deg) translateZ(50px);
+}
+.imgs li:nth-child(4){
+	transform: rotateY(270deg) translateZ(50px);
+}
+.imgs li:nth-child(5){
+	transform: rotateX(90deg) translateZ(50px);
+}
+.imgs li:nth-child(6){
+	transform: rotateX(-90deg) translateZ(50px);
+}
+/* 外层相册 */
+.imgs li:nth-child(7){
+	transform: rotateY(0deg) translateZ(100px);
+}
+.imgs li:nth-child(8){
+	transform: rotateY(90deg) translateZ(100px);
+}
+.imgs li:nth-child(9){
+	transform: rotateY(180deg) translateZ(100px);
+}
+.imgs li:nth-child(10){
+	transform: rotateY(270deg) translateZ(100px);
+}
+.imgs li:nth-child(11){
+	transform: rotateX(90deg) translateZ(100px);
+}
+.imgs li:nth-child(12){
+	transform: rotateX(-90deg) translateZ(100px);
+}
+.yun-zhi{
+	opacity: 0.2;
+	transition: all 1s ease;
+}
+
+/* 划过效果(外层图片向外推得效果) */
+.imgs:hover li:nth-child(7){
+	opacity: 1;
+	transform: rotateY(0deg) translateZ(250px);
+}
+.imgs:hover li:nth-child(8){
+	opacity: 1;
+	transform: rotateY(90deg) translateZ(250px);
+}
+.imgs:hover li:nth-child(9){
+	opacity: 1;
+	transform: rotateY(180deg) translateZ(250px);
+}
+.imgs:hover li:nth-child(10){
+	opacity: 1;
+	transform: rotateY(270deg) translateZ(250px);
+}
+.imgs:hover li:nth-child(11){
+	opacity: 1;
+	transform: rotateX(90deg) translateZ(250px);
+}
+.imgs:hover li:nth-child(12){
+	opacity: 1;
+	transform: rotateX(-90deg) translateZ(250px);
+}
+
+
+.music{
+	padding: 10px 6px;
+	position: fixed;
+	left: 20px;
+	top: 50%;
+	display: none;
+	border: 1px solid black;
+	border-top-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+.music:hover{
+	border-color: #E2E2E2;
+}
+.music:hover p{
+	color: #E2E2E2;
+}
+.music p{
+	text-align: center;
+	font-family: "楷体";
+	font-weight: 800;
+}
+
+.change-music{
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	padding:40px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.btn{
+	position: relative;
+	background-color: #333;
+	padding:10px 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100px;
+}
+.btn img{
+	position: absolute;
+}
+.btn img:first-child{
+	width: 60px;
+	border-radius: 50%;
+	right: 100%;
+	animation: rotate 10s linear infinite;
+}
+.btn img:last-child{
+	width: 20px;
+	right: 20px;
+	transform: rotateZ(-90deg);
+	transition: all 0.6s ease;
+}
+
+@keyframes rotate{
+	0%{
+		transform: translateX(50%) rotateZ(0deg);
+	}
+	100%{
+		transform: translateX(50%) rotateZ(-360deg);
+	}
+}
+
+.btn span{
+	position: relative;
+	color: #e2e2e2;
+	letter-spacing: 2px;
+}
+.drop-down{
+	background-color: #000;
+	width: 60%;
+	font-size: 12px;
+	padding: 0 6px;
+	color: #E2E2E2;
+	display: none;
+	padding-bottom: 6px;
+}
+.drop-down li{
+	padding: 6px 0;
+	border-bottom: 1px solid #999;
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+.drop-down li:last-child{
+	border: none;
+}
+.drop-down img{
+	width: 12px;
+	position: absolute;
+	right: 0px;
+	opacity: 0;
+}
+.drop-down .active{
+	opacity: 1;
+}

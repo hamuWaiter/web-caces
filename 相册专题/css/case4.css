@@ -1,0 +1,58 @@
+.box{
+	width: 100%;
+	height: 100vh;
+	background-color: #000;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: url(../img/bg/7.jpg) center center no-repeat;
+	background-size: calc(100%);
+}
+.cover{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: 100;
+}
+.container{
+	width: 30%;
+	height: 300px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	perspective: 800px;
+}
+.container .pics{
+	width: 100%;
+	position: relative;
+	transform-style: preserve-3d;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* animation: anim 100s linear infinite; */
+}
+
+@keyframes anim{
+	0%{
+		transform: rotateX(0deg) rotateY(0deg);
+	}
+	50%{
+		transform: rotateX(180deg) rotateY(180deg);
+	}
+	100%{
+		transform: rotateX(360deg) rotateY(360deg);
+	}
+}
+.container li{
+	width: 100%;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 4s ease;
+}
+.container img{
+	width: 20%;
+	border-radius: 4px;
+}

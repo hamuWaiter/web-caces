@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6中json相关的操作</title>
+	</head>
+	<body>
+		<script>
+			let jsObj = {a:12,b:13,c:14},
+				JSONObj = '{"a":12,"b":13,"c":14}';
+			console.log("js对象：");
+			console.log(jsObj);
+			console.log("转为JSON格式为:"+JSON.stringify(jsObj));
+			console.log("JSON对象：");
+			console.log(JSONObj);
+			console.log("转为普通js格式为:");
+			// 注意，JSON格式数据的key必须用双引号括起来，不然会报错
+			// 一般从服务器请求回来的数据为json格式的，需要parse为普通格式
+			console.log(JSON.parse(JSONObj));
+		</script>
+	</body>
+</html>

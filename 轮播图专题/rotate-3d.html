@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>3d旋转轮播</title>
+	<link rel="stylesheet" href="./css/swiper02.css">
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<ul class="picBox"></ul>
+		</div>
+		<!-- 切换控件 -->
+		<div class="controller">
+			<span class="pre"></span>
+			<span class="next"></span>
+		</div>
+	</div>
+</body>
+<script src="./js/jquery-3.4.1.js"></script>
+<script src="./js/swiper02.js"></script>
+<script>
+	swiperRotate_3D(["./img/swiper02/1.jpg","./img/swiper02/2.jpg","./img/swiper02/3.jpg","./img/swiper02/4.jpg"],
+	$(".picBox"),$(".controller .pre"),$(".controller .next"),1);
+</script>
+</html>

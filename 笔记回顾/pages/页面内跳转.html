@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>a标签进行页面内跳转</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		input{
+			margin: 10px 0;
+			border: none;
+			outline: none;
+			padding: 8px;
+			border-radius: 6px;
+		}
+		.box{
+			/* width: 100vw; */
+			width: 100%;
+			height: 100vh;
+			/* background: linear-gradient(to bottom right,black,transparent); */
+			position: relative;
+		}
+		img{
+			display: block;
+			width: 300px;
+			margin: 10px auto;
+			border-radius: 6px;
+		}
+		#jumpTo{
+			transform: rotate(60deg);
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<img id="jumpBack" src="../img/9.jpg" title="跳转目标位置">
+		<a href="#jumpTo">jumpTo</a>
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img id="jumpTo" src="../img/9.jpg" title="跳转目标位置">
+		<a href="#jumpBack">jumpBack</a>
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+		<img src="../img/9.jpg" >
+	</div>
+</body>
+</html>

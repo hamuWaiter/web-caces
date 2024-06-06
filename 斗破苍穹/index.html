@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>斗破苍穹</title>
+	<link rel="stylesheet" type="text/css" href="css/sytle.css"/>
+</head>
+<body ondragstart="return false">
+	<div class="box">
+		<div class="bg-img">
+			<img src="img/bgs/1.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/2.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/3.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/4.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/5.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/6.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/7.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/8.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/9.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/10.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/11.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/12.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/13.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/14.jpg" alt="" class="bounce-bg">
+			<img src="img/bgs/15.jpg" alt="" class="bounce-bg">
+		</div>
+		<div class="img-container">
+			<ul class="imgs">
+				<!-- 内层相册 -->
+				<li class="cai-lin"><img src="img/pics/彩鳞1.jpg" ></li>
+				<li class="cai-lin"><img src="img/pics/彩鳞2.jpg" ></li>
+				<li class="cai-lin"><img src="img/pics/彩鳞3.jpg" ></li>
+				<li class="cai-lin"><img src="img/pics/彩鳞4.jpg" ></li>
+				<li class="cai-lin"><img src="img/pics/彩鳞5.jpg" ></li>
+				<li class="cai-lin"><img src="img/pics/彩鳞6.jpg" ></li>
+				<!-- 外层相册 -->
+				<li class="yun-zhi"><img src="img/pics/云芝1.jpg" ></li>
+				<li class="yun-zhi"><img src="img/pics/云芝2.jpg" ></li>
+				<li class="yun-zhi"><img src="img/pics/云芝3.jpg" ></li>
+				<li class="yun-zhi"><img src="img/pics/云芝4.jpg" ></li>
+				<li class="yun-zhi"><img src="img/pics/云芝5.jpg" ></li>
+				<li class="yun-zhi"><img src="img/pics/云芝6.jpg" ></li>
+			</ul>
+		</div>
+		<audio id="audio" src="audio/BGM2.mp3" loop="loop">当前浏览器不支持audio</audio>
+		<div class="music"></div>
+		<div class="change-music">
+			<button class="btn">
+				<img src="icon.jpg" >
+				<span>曲库</span>
+				<img src="img/other/menu.svg" class="menu">
+			</button>
+			<ul class="drop-down">
+				<li>从别后 <img src="img/other/playing.svg" ></li>
+				<li>直破苍穹 <img src="img/other/playing.svg" ></li>
+			</ul>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+	// 魔方
+		let $box = $(".imgs");
+		let $clearTimerBox = $(".img-container");
+		
+		
+		// 		1.$box拖拽的视图更新与其animation不能同时进行，也就是说，当开始拖拽时
+		// 要先将其animation设置为none，拖拽结束再加上....
+		// 		2.貌似通过animation改变的rotate的值也不能反映到真实的rotate值上去，也就是获取的
+		// rotate值跟实际上的不一样
+		let timer = null;
+		let originDisX = -30,
+			originDisY = 0,
+			realX = 0,
+			realY = 0;
+		// 1.自动转动(通过更改originDisX、originDisY再设置到imgs元素的transform上去
+		// 而不是直接通过animation、设置动画)
+		$(window).on("load",function() {
+			timer = setInterval(rotateStart,15)
+		})
+		function rotateStart() {
+			originDisY += 0.25;
+			$box.css({
+				"transform":"rotateX("+originDisX+"deg) "+"rotateY("+originDisY+"deg)"
+			})
+		}
+		$clearTimerBox.on("mousedown",()=>{
+			clearInterval(timer);
+			timer = null;
+			setTimeout(function() {
+				timer = setInterval(rotateStart,15)
+			},3000)
+		})
+		// 2.拖拽
+		$box.on("mousedown",function(e){
+			$box.css({
+				"transform":"rotateX("+originDisX+"deg) "+"rotateY("+originDisY+"deg)"
+			})
+			let pressPositionX = e.pageX,//鼠标按下的位置
+				pressPositionY = e.pageY,
+				changeDisX = 0,
+				changeDisY = 0;
+			$box.on("mousemove",function(e){
+				
+				changeDisX = e.pageX - pressPositionX;
+				changeDisY = e.pageY - pressPositionY;
+				realX = originDisX + changeDisY;
+				realY = originDisY + changeDisX;
+				$box.css({
+					"transform":"rotateX("+realX+"deg) "+"rotateY("+realY+"deg)"
+				})
+			})
+			$box.on("mouseup",function(){
+				originDisX = realX;//记录鼠标松开的位置才能无缝拖拽
+				originDisY = realY;
+				$box.off("mousemove"); //解绑box的鼠标移动事件
+			})
+			// 这一块代码会让css的transform的动画出现抖动问题。。。。。。。。。
+			
+			// $box.on("mouseleave",function(){
+			// 	originDisX = realX;//记录鼠标松开的位置才能无缝拖拽
+			// 	originDisY = realY;
+			// 	$box.off("mousemove"); //解绑box的鼠标移动事件
+			// })
+		})
+		
+	</script>
+	<script>
+	// 歌词
+		//歌曲 
+	let musicStorage = [`[00:02:00] 从别后 - AZA微唱团 
+[00:05:00] 词：Riesling
+[00:08:00] 曲：陈鹏杰
+[00:18:00] 一片云落入掌心
+[00:22:00] 渺渺万里何处去
+[00:26:00] 只记取离别时的你
+[00:30:00] 仍年少意气
+[00:35:00] 转身过一入天际
+[00:39:00] 愿我如那时的风
+[00:44:00] 拂去尘世俗名轻拥着你
+[00:51:00] 碧落箫声吹尽
+[00:55:00] 沧海一遇却难找寻
+[00:59:00] 前路崇山峻岭不再有你同行
+[01:08:00] 纵使微茫如烟纵有万般思念
+[01:16:00] 流光总将故人搁浅在断简残篇
+[01:21:00] 不成眠
+[01:25:00] 不等谁来证明不必狂歌痛饮
+[01:33:00] 唯盼重相见
+[01:37:00] 归来时一醉明月
+[02:04:00] 这片云不知归期
+[02:08:00] 渺渺万里何处去
+[02:12:00] 只记取离别时的你
+[02:16:00] 仍年少意气
+[02:21:00] 经年过却难忘记
+[02:25:00] 愿我如那时的风
+[02:30:00] 拂去尘世俗名轻拥着你
+[02:37:00] 苍穹箫声吹尽
+[02:41:00] 此生魂梦已逐君去
+[02:45:00] 前路崇山峻岭不再有你同行
+[02:54:00] 纵使微茫如烟纵有万般思念
+[03:02:00] 流光总将故人搁浅在断简残篇
+[03:07:00] 不成眠
+[03:11:00] 不等谁来证明不必狂歌痛饮
+[03:19:00] 唯盼重相见
+[03:23:00] 我如倦鸟归林
+[03:28:00] 纵使微茫如烟纵有万般思念
+[03:36:00] 流光总将故人搁浅在断简残篇
+[03:41:00] 不成眠
+[03:45:00] 不理白驹过隙不信生死有命
+[03:53:00] 唯盼重相见 归来时一醉明月
+[03:57:00] 归来时一醉明月`,
+`[00:00:00] 直破穹苍 - 周深 
+[00:02:00] 作词：冥凰  
+[00:04:00] 作曲：李建衡  
+[00:05:00] 编曲：崔博源&李建衡   
+[00:06:00] 人声录制&监唱：徐威@上海V-Studio
+[00:08:00] 混音：周天澈@Studio21A
+[00:23:00] 有没有想过 
+[00:26:00] 穿越这片沙漠 
+[00:32:00] 前方是什么
+[00:34:00] 是就此陨落 
+[00:37:00] 还是抓牢命运 脉搏
+[00:45:00] 他曾经 爱过 恨过 痛过
+[00:50:00] 直到望见远处那抹焰火
+[00:56:00] 也许这 是祸 是过 是错
+[01:02:00] 仍不害怕 去烧灼 
+[01:08:00] 管那六合八荒 斗一场
+[01:13:00] 焰分噬浪谁能抗
+[01:18:00] 漫说这漫漫险关 莫登攀
+[01:24:00] 他欲乘风 直破穹苍
+[01:42:00] 太多的纠葛 
+[01:45:00] 太多悲欢离合 
+[01:51:00] 要人太执着
+[01:53:00] 该如何选择 
+[01:56:00] 才能看清是非 漩涡
+[02:04:00] 他曾经 哭过 泪过 笑过
+[02:09:00] 直到紧握手心那抹焰火
+[02:15:00] 走遍这 荒山 大漠 湖泊 
+[02:20:00] 仍不退缩 去冲破
+[02:27:00] 管那龙潭虎穴 斗一场
+[02:32:00] 生死福祸也跌宕
+[02:38:00] 漫说他太多如果 都过往
+[02:43:00] 还来惊诧 满堂
+[02:49:00] 管那六合八荒 斗一场
+[02:54:00] 焰分噬浪谁能抗
+[03:00:00] 漫说这漫漫险关 莫登攀
+[03:06:00] 他欲乘风 直破穹苍`]
+// 从别后
+		let $audio = $("#audio"),//音频对象
+			$musicBox = $(".change-music"),//切换歌曲盒子
+			$toggleMusic = $(".btn"),//切换歌曲按钮
+			$menu = $(".menu"),//菜单icon
+			$dropDown = $(".drop-down");//歌曲菜单
+			$active = $(".drop-down img");//正在播放的歌的标记
+			
+		$musicBox.on("mouseleave",()=>{
+			$dropDown.slideUp(200);
+			$menu.css({
+				"transform" : "rotateZ(-90deg)"
+			})
+		})
+		$toggleMusic.on("mouseenter",()=>{
+			$dropDown.slideDown(200);
+			$menu.css({
+				"transform" : "rotateZ(0deg)"
+			})
+		})
+		
+		// 切换歌曲相关变量(第1步)
+		let $item = $(".drop-down li"),//曲库中的的歌曲
+			musicLen = $item.length,
+			currentMusicIdx = 0,
+			oldMusicIdx = 1;
+			
+		// 替换歌词相关变量(第4步)
+		let music,//存储以换行符分隔歌词字符串的结果
+			timeStr,//存储每一句歌词的出现时间字符串
+			musicStr,//存储每一句歌词字符串
+			timeNum,//存储每一句歌词出现时间（timeStr转换过来的毫秒数）
+			tem;//timeStr到毫秒数转换的中间变量数组
+		
+		// 1.切换歌曲	
+		for(let i = 0; i < musicLen; i++) {
+			$($item[i]).on("click",function() {
+				$($active[oldMusicIdx]).removeClass("active")
+				$($active[i]).addClass("active")
+				$audio.attr("src","audio/BGM"+(i+1)+".mp3");//切换歌曲
+				replaceSongLrc(musicStorage[i])//1.替换歌词
+				$audio[0].play();//播放
+				$dropDown.slideUp(200);
+				$menu.css({
+					"transform" : "rotateZ(-90deg)"
+				})
+				oldMusicIdx = i;
+			})
+		}
+		
+		// 2.替换歌词
+			// 替换歌词函数
+		function replaceSongLrc(songStr) {
+			//2.1.提取歌词和时间字符串
+			music = songStr.split("\n");
+			musicStr = [];
+			timeStr = [];
+			music.forEach((item)=>{
+				timeStr.push(item.split("] ")[0].replace("[",""))
+				musicStr.push(item.split("] ")[1])
+			})
+			//2.2.将时间转换为对应的毫秒数（number型）
+			timeNum = [];
+			tem = [];
+			timeStr.forEach((item)=>{
+				tem = item.split(":");
+				timeNum.push(parseInt(tem[0])*60000+parseInt(tem[1])*1000)
+			})
+			showTxt(musicStr[0]);//让第一句歌词显现出来
+		}
+		
+		// 3.初始化歌词并播放歌曲
+		replaceSongLrc(musicStorage[1]);//当进入页面时根据歌词字符串执行一次歌词处理
+		$($active[1]).addClass("active");//显示正在播放的音乐符号标记
+		$audio[0].play();//歌词处理完后执行自动播放
+		
+		// 4.监听播放
+		let current = 0;//现在的播放时间点
+		let idx = 0;//现在显示歌词的索引号
+		let lastIndex = musicStr.length - 1;
+		$audio.on("timeupdate", ()=>{
+			// 只有原生的audio对象才能获取到currentTime属性，所以要转换为原生js对象再获取
+			current = Math.floor($audio[0].currentTime*1000);
+			
+			timeNum.forEach((item,index)=>{
+				if(timeNum[index] < current && timeNum[index+1] > current){
+					if(index === idx) return;//如果还是这句歌，就不重新出现一遍这句歌词
+					showTxt(musicStr[index]);
+					idx = index;//记录现在显示的歌词索引号
+				}
+			})
+		}).on("play",()=> {
+			// duration不知道为什么非得在audio的播放事件里获取才有效全局获取无效
+			timeNum.push(Math.floor($audio[0].duration*1000));//执行这一步与timeupdate中的判断条件有关。。。。。
+		})
+		
+		// 5.歌词显示函数
+		function showTxt(str) {
+			let $music = $(".music");//歌词盒子
+			$music.fadeOut(0);//隐藏歌词条
+			// 1.清空上一句歌词
+			$music.empty();
+			let musicArr = str.split("");
+			//2.根据传入的歌词得到歌词文字个数
+			let len = musicArr.length;
+			//3.根据文字数目创建p元素
+			for(let i = 0; i < len; i++) {
+				let $el = $("<p>"+musicArr[i]+"</p>");
+				$el.css({
+					"fontSize" : Math.random()*10 + 14,
+					// "color" : getColor()
+				})
+				$music.append($el);
+			}
+			$music.fadeIn(1000)//歌词条出现
+		}
+		
+		
+		// 6.随机生成颜色值(可用于第5步生成P元素时随机生成颜色)
+		function getColor() {
+			return "rgba("+Math.random()*256+","+Math.random()*256+","+Math.random()*256+",1)"
+		}
+	</script>
+	<script>
+	// 背景操作
+		let $bounceBg = $(".bounce-bg");
+		// 1.鼠标划过背景微动
+		let centerX = $(window).width()/2,
+			centerY = $(window).height()/2,
+			disX = 0,
+			disY = 0;
+		$(window).on("mousemove",(e)=>{
+			disX = Math.round((e.pageX - centerX)/20);
+			disY = Math.round((e.pageY - centerY)/20);
+			$bounceBg.css({
+				"transform":"rotateX("+disX/60+"deg) "+"rotateY("+disY/60+"deg)"
+			})
+		})
+		
+		// 2.随机在15张背景图中切换背景图片
+		// 2.1.切换背景
+		let preBgIdx = 0;
+		let bgTimer = null;
+		let bgNumber = $bounceBg.length - 1;
+		$($bounceBg[preBgIdx]).addClass("on")
+		function changeBg() {
+			// 1.清除上一张图片的显示
+			$($bounceBg[preBgIdx]).removeClass("on")
+			// 2.随机生成新的图片索引
+			let index = Math.round(Math.random()*bgNumber);
+			// 3.将对应索引图片的opacity置为1
+			$($bounceBg[index]).addClass("on")
+			
+			// 4.记录这一次的索引作为下一次切换背景图片时清除样式的对象
+			preBgIdx = index;
+		}
+		// 2.2.开启定时器
+		bgTimer = setInterval(changeBg,10000)
+		
+	</script>
+	<script>
+		// 切换歌曲
+	</script>
+</body>
+</html>

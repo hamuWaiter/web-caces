@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="canvas" width="300" height="300"></canvas>
+		<script>
+		// reatePattern(image, type)
+			// 该方法接受两个参数。Image 可以是一个 Image 对象的引用，或者另一个 canvas 对象。
+			// Type 必须是下面的字符串值之一：repeat，repeat-x，repeat-y 和 no-repeat
+		
+		// createPattern 的例子:
+		//1. 在最后的例子中，我创建一个图案然后赋给了 fillStyle 属性。唯一要注意的是，使
+		//   用 Image 对象的 onload handler 来确保设置图案之前图像已经装载完毕。
+		
+		// 2.注意：
+		//   与 drawImage 有点不同，你需要确认 image 对象已经装载完毕，否则图案可能效果不对的。
+		function draw() {
+		  var ctx = document.getElementById('canvas').getContext('2d');
+		
+		  // 创建新 image 对象，用作图案
+		  var img = new Image();
+		  img.src = 'images/2.jpg';
+		  img.onload = function() {
+		    // 创建图案
+		    var ptrn = ctx.createPattern(img, 'repeat');
+		    ctx.fillStyle = ptrn;
+		    ctx.fillRect(0, 0, 300, 300);
+		
+		  }
+		}
+		draw();
+		</script>
+	</body>
+</html>

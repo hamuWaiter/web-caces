@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>中国风加载页面（暗色）</title>
+	<link rel="stylesheet" type="text/css" href="css/wave.css"/>
+</head>
+<body>
+	<div class="box">
+		<div class="loading-box">
+			<!-- 夕阳 -->
+			<div class="sun"></div>
+			<!-- 山 -->
+			<ul class="mountainBox left">
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+			</ul>
+			<ul class="mountainBox right">
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+				<li class="mountain">
+					<span class="bg">
+						<span></span>
+					</span>
+				</li>
+			</ul>
+			<!-- 古诗 -->
+			<div class="poetBox">
+				<ul class="poet">
+					<li class="item">
+						<p>向</p>
+						<p>晚</p>
+						<p>意</p>
+						<p>不</p>
+						<p>适</p>
+						<p>，</p>
+					</li>
+					<li class="item">
+						<p>驱</p>
+						<p>车</p>
+						<p>登</p>
+						<p>古</p>
+						<p>原</p>
+						<p>。</p>
+					</li>
+					<li class="item">
+						<p>夕</p>
+						<p>阳</p>
+						<p>无</p>
+						<p>限</p>
+						<p>好</p>
+						<p>，</p>
+					</li>
+					<li class="item">
+						<p>只</p>
+						<p>是</p>
+						<p>近</p>
+						<p>黄</p>
+						<p>昏</p>
+						<p>。</p>
+					</li>
+					<!-- 词名 -->
+					<li class="item poet-name">
+						<!-- 作者 -->
+						<p>登乐游原
+							<span class="posigner">李商隐</span>
+						</p>
+					</li>
+					
+					<!-- 加载中文本 -->
+					<li class="item loading-txt">
+						<p>页面加载中,客官请稍候</p>
+					</li>
+					<div style="clear: both;"></div>
+				</ul>
+			</div>
+			<div class="loading-complete">
+				<ul class="loading-scroll-bar">
+					<p class="success">加载完成！请慢用...</p>
+					<li class="tp-bar item">
+						<!-- 卷轴的左右装饰 -->
+						<span class="lt"></span>
+						<span class="rt"></span>
+					</li>
+					<li class="bt-bar item">
+						<span class="lt"></span>
+						<span class="rt"></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		var $word = $(".poet p");
+		var len = $word.length;
+		for(var i = 0; i < len; i++) {
+			$($word[i]).css({
+				"transitionDelay" : i*0.1 + 1 +"s"
+			})
+		}
+		setTimeout(function(){
+			$word.css({
+				"opacity" : "1"
+			})
+		},400);
+	</script>
+	<script>
+		var $complete = $(".loading-scroll-bar");
+		
+		setTimeout(function(){
+			
+			$complete.toggleClass("on");
+			
+		},1000);
+	</script>
+</body>
+</html>

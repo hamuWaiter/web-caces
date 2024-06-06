@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>一起来看流星雨</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			body {
+				overflow: hidden;
+			}
+
+			#myCanvas {
+				background:
+					linear-gradient(to bottom, rgba(0, 0, 0, 1),
+					rgba(47, 72, 104),
+					rgba(120, 179, 230, 1));
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas">您的浏览器不支持canvas，请更换浏览器</canvas>
+	</body>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		let canvas = $("#myCanvas"),
+			ctx = canvas[0].getContext("2d"),
+			width = $(window).width(),
+			height = $(window).height();
+		canvas.attr({
+			"width": width,
+			"height": height
+		})
+		$(window).on("resize", () => {
+			width = $(window).width();
+			height = $(window).height();
+			canvas.attr({
+				"width": width,
+				"height": height
+			})
+		})
+
+		// 一些函数(功能模块)
+		// 传入数值获取这个最大数值范围内的随机值
+		function getRandom(vaule, baseValue) {
+			// value是要申城随机数的最大范围
+			// baseValue是随机数的基数，即最小值，
+			// 不传最小值默认为0
+			if (vaule > 4) {
+				if (!baseValue) {
+					return Math.floor(Math.random() * vaule);
+				} else {
+					return Math.floor(Math.random() * vaule + baseValue);
+				}
+
+			} else {
+				if (!baseValue) {
+					return (Math.random() * vaule).toFixed(2);
+				} else {
+					return (Math.random() * vaule + baseValue).toFixed(2);
+				}
+			}
+		}
+
+		function getRGB() {
+			return `${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)}`
+		}
+
+		function createGradient(lineSize, rgb) {
+			// lineSize指的是绘制直线的长度的水平值（绘制的是斜线）
+			// rgb是渐变颜色，传值格式为：“255,255,255”，不传则随机生成渐变颜色
+			let grd = ctx.createLinearGradient(0, 0, lineSize, 0);
+			if (!rgb) {
+				grd.addColorStop(0, `rgba(${getRGB()},1)`);
+			} else {
+				grd.addColorStop(0, `rgba(${rgb},1)`);
+			}
+			grd.addColorStop(1, "transparent");
+			return grd;
+			console.log(grd);
+		}
+		//星星类对象
+		// 星星Star类
+		class Star {
+			constructor(x, y, r, alpha) {
+				// 绘制位置以及大小最后是初始透明度
+				this.x = x;
+				this.y = y;
+				this.r = r;
+				this.alpha = alpha;
+				this.status = true; //控制星星的变暗或是变亮
+			}
+			twinkle() {
+				// 闪烁
+				if (this.alpha > 0.3 && this.status) {
+					this.alpha -= 0.01;
+				} else {
+					this.status = false;
+				}
+				if (this.alpha < 0.9 && !this.status) {
+					this.alpha += 0.01;
+				} else {
+					this.status = true;
+				}
+			}
+			draw() {
+				ctx.beginPath();
+				ctx.globalCompositeOperation = "lighter";
+				ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+				ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+				ctx.fill();
+			}
+
+		}
+		// 流星类
+		class Meteor {
+			constructor(x, y, length, deg) {
+				// x、y既是线条绘制起点
+				// 也是绘制中心
+				this.x = x;
+				this.y = y;
+				// 绘制斜线的水平长度
+				this.length = length;
+				this.deg = deg;
+				// 终点（两点确定一条直线）
+				// 最终为右斜向上的直线
+				this.x1 = length;
+				this.y1 = -length * (Math.tan(deg));
+
+				this.grd = createGradient(length, "255,255,255");
+				this.vx = getRandom(9, 12);
+			}
+			move() {
+				// 绘制中心点向左下方移动
+				this.x += -this.vx; //向左移动x速度为负，y为正
+				this.y += this.vx * Math.tan(this.deg);
+			}
+			draw() {
+				// 凡是要进行ctx.translate()设置绘制中心操作时第一句
+				// 必须是ctx.save()保存绘图环境
+				ctx.save();
+				// 设置绘制中心
+				ctx.translate(this.x, this.y);
+				ctx.beginPath();
+				ctx.moveTo(0, 0);
+				ctx.lineTo(this.x1, this.y1);
+				ctx.strokeStyle = this.grd;
+				ctx.stroke();
+				// 恢复绘图环境
+				ctx.restore();
+			}
+		}
+
+
+		// 实例化对象
+		//流星实例化
+		let meteorsArr = [],
+			meteorsNum = 14,
+			// 斜线(流星)的角度
+			deg = Math.PI / 12,
+			// 斜线的水平投影长度
+			length = 200,
+			// 用于控制生成的斜线初始位置的范围使流星运动更加自然
+			randomValue = {
+				x: height / Math.tan(deg),
+				y: height + width * Math.tan(deg)
+			};
+			
+		for (let i = 0; i < meteorsNum; i++) {
+			meteorsArr.push(new Meteor(getRandom(randomValue.x, width),
+				getRandom(randomValue.y, -height), length, deg));
+		}
+		//星星实例化
+		let starsNum = 200,
+			starsArr = [],
+			// 绘制原点以及半径
+			positionX,
+			positionY,
+			radius,
+		// 初始透明度
+			opacity;
+			
+		for (let i = 0; i < starsNum; i++) {
+			positionX = getRandom(width);
+			positionY = getRandom(height);
+			radius = getRandom(2) + 1; //最小1最大3
+			opacity = getRandom(1);
+			let star = new Star(positionX, positionY, radius, opacity);
+			starsArr.push(star);
+		}
+
+		// 开启定时器
+		setInterval(() => {
+			// 清空画布
+			ctx.clearRect(0, 0, width, height);
+			meteorsArr.forEach((item, index) => {
+				item.move();
+				item.draw();
+				if (Math.abs(item.x) >= item.x1 && item.x < 0) {
+					meteorsArr.splice(index, 1); //删除消失的
+					meteorsArr.push(new Meteor(getRandom(randomValue.x, width),
+						getRandom(randomValue.y, -height), length, deg));
+					console.log("消失啦！！！");
+				}
+			})
+			for (let i in starsArr) {
+				// 闪烁
+				starsArr[i].twinkle();
+				// 绘图
+				starsArr[i].draw();
+			}
+		}, 20);
+	</script>
+</html>

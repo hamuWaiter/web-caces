@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6函数扩展</title>
+	</head>
+	<body>
+		<script>
+		// 1.函数默认参数
+			// ES5默认参数
+			function funcES5(a,b,c){
+				c = c || 5;
+				console.log(a);
+				console.log(b);
+				console.log(c);
+			}
+			// ES6默认参数写法
+			function funcES6(a,b,c=5){
+				console.log(a);
+				console.log(b);
+				console.log(c);
+			}
+		// 2.ES6函数扩展"..."，可用于展开数组
+			let arr1= [12,5,8];
+			let arr2= ["a","b","c"];
+			let arr3 = [...arr1,...arr2];
+			console.log(arr3);
+			function test(arg1,arg2,arg3){
+				console.log(arg1,arg2,arg3);
+			}
+			//
+			test(...arr1);
+			
+			// "..."还可以收集函数的剩余参数
+			function restArgsTest(a,b,c,...args){
+				console.log("第一个参数:"+a);
+				console.log("第二个参数:"+b);
+				console.log("第三个参数:"+c);
+				console.log("剩余的参数:");
+				console.log(args);
+			}
+			console.log("restArgsTest(3,2,6,12,6,78,5):");
+			restArgsTest(3,2,6,12,6,78,5);
+			
+		</script>
+	</body>
+</html>

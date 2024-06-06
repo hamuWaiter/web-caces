@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>css3实现瀑布流</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			ul li {
+				list-style: none;
+				margin-bottom: 10px;
+				background-color: antiquewhite;
+				border-radius: 6px;
+				overflow: hidden;
+				padding-bottom: 10px;
+			}
+			
+/* 布局是一列一列布局的竖向布局 */
+
+/* css瀑布流式布局核心代码： */
+			img {
+				display: block;
+				width: 100%;
+			}
+
+			.list {
+				/* 指定列数 */
+				column-count: 5;
+				/* 指定列间距，不写默认30px */
+				column-gap: 10px;
+			}
+			
+			.list li{
+				
+				break-inside: avoid;
+			}
+/* css瀑布流式布局核心代码： */
+
+			p {
+				line-height: 2em;
+				font-size: 18px;
+				color: #333;
+				padding-left: 6px;
+				background-color: antiquewhite;
+			}
+
+			.buy {
+				position: relative;
+			}
+
+			.buy button {
+				border: none;
+				background-color: darkorange;
+				padding: 4px 6px;
+				position: absolute;
+				top: 0;
+				right: 6px;
+				border-radius: 4px;
+				outline: none;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<ul class="list">
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+				<li>
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script>
+		window.onload = function(){
+			
+			let imgs = document.getElementsByTagName("img");
+			// imgs.forEach(item=>{
+				// 通过TagName获取的图片集合是伪数组，通过“...”
+				// 展开再用“[]”包装成一个图片数组即可使用数组方法。
+			// 	console.log(1)
+			// })
+			let number = 0;
+			[...imgs].forEach(item=>{
+				number = Math.round(Math.random()*20)+1;
+				item.src = `../img/${number}.jpg`;
+			})
+		}
+	</script>
+</html>

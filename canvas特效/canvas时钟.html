@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>canvas绘制时钟</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.box {
+				width: 100%;
+				height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box" style="width: 100%;">
+			<canvas id="canvas"></canvas>
+		</div>
+
+	</body>
+	<script>
+		// 案例网址：
+		// https://www.bilibili.com/video/BV1Y4411N7e5?p=11
+
+
+
+		let canvas = document.getElementById("canvas"),
+			ctx = canvas.getContext("2d");
+		// 1.画布设置
+		canvas.width = 400,
+			canvas.height = 400;
+		// 表盘绘制
+		function drawBg() {
+			// 3.时钟绘制
+			// 3.1 表盘
+			ctx.beginPath(); //路径初始化
+			ctx.arc(0, 0, 180, 0, 2 * Math.PI);
+			ctx.lineWidth = 8; //描边宽度
+			ctx.strokeStyle = "#777";//描边颜色
+			ctx.stroke(); //描边
+
+			// 3.2分钟刻度（60个）
+			ctx.lineWidth = 2;
+			for (let i = 0; i < 60; i++) {
+				ctx.beginPath();
+				ctx.rotate(2 * Math.PI / 60); //旋转
+				ctx.moveTo(0, -165); //旋转后绘制
+				ctx.lineTo(0, -180);
+				ctx.stroke();
+			}
+
+			// 3.2分钟刻度（60个）
+			ctx.lineWidth = 6;
+			for (let i = 0; i < 12; i++) {
+				ctx.beginPath();
+				ctx.rotate(2 * Math.PI / 12);
+				ctx.moveTo(0, -156);
+				ctx.lineTo(0, -180);
+				ctx.stroke();
+			}
+		}
+
+
+		// 绘制时间刻度
+		function drawScale() {
+			// 绘制时间刻度
+
+			//画布旋转方式实现
+			// 		for(let i = 0; i < 12 ; i++) {
+			// 			// save()与restore()在有rotate代码块中应该分局与首尾！！！！！！！！！！
+			// //---------当使用rotate出现意料之外的结果时首先考虑是否有save()或restore()--------------------//
+			// 			ctx.save();
+			// 			ctx.rotate(2*Math.PI/12*(i+1));
+			// 			ctx.font = "20px arial";
+			// 			ctx.textAlign = "center";
+			// 			ctx.textBaseline = "middle";
+			// 			ctx.fillText(i+1,0,-140);
+			// 			ctx.restore();
+			// 		}
+
+			// 三角函数方式实现
+			for (let i = 0; i < 12; i++) {
+				ctx.font = "20px arial";
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(i + 1, 140 * Math.sin(2 * Math.PI / 12 * (i + 1)),
+					-140 * Math.cos(2 * Math.PI / 12 * (i + 1)));
+			}
+		}
+
+		// 一般绘制中用到rotate命令时，在回之前先ctx.save();保存绘画环境，
+		// 然后在绘画完成之后恢复ctx.restore()；反正当rotate绘画有问题是加上这两句
+
+		function pointerMove() {
+			let time = new Date(),
+				hour = time.getHours(),
+				minute = time.getMinutes(),
+				second = time.getSeconds();
+
+			// 3.3 秒针绘制
+			drawPointer(ctx, 60, second, "black", 1, 20, -140);
+			// 3.4 分针绘制
+			drawPointer(ctx, 60, minute, "orange", 3, 20, -120);
+			// 3.5 时针绘制
+			drawPointer(ctx, 12, hour, "darkorange", 6, 20, -90);
+
+			// 3.6 表针旋转轴
+			ctx.beginPath();
+			ctx.arc(0, 0, 10, 0, 2 * Math.PI);
+			ctx.fill();
+		}
+
+		// 表针绘制
+		function drawPointer(context, totalStep, hms, pointerColor, pointerWidth, startPosition, finalPosition) {
+
+			// 1.context为canvas的上下文对象
+			// 2.totalStep是秒与分钟/分钟与小时/小时与一天之间的进制
+			// 3.hms是表示当前的秒/分/时，对应的是绘制的分针、分针、时针
+			// 4.pointerColor是指针的颜色
+			// 5.pointerWidth是指针宽度
+			// 6.startPositon、finalPositon是用moveTo()、lineTo()绘制之间的坐标信息
+			context.save();
+			context.beginPath();
+			context.rotate(2 * Math.PI / totalStep * hms);
+			context.strokeStyle = pointerColor;
+			context.lineWidth = pointerWidth;
+			context.moveTo(0, startPosition);
+			context.lineTo(0, finalPosition);
+			context.stroke();
+			context.restore();
+		}
+
+		function clockRun() {
+			// 1. 清除画布
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			// 保存绘画环境
+			ctx.save(); //一定要有！！！！！！
+
+			//2.绘图设置
+			ctx.translate(canvas.width / 2, canvas.height / 2); //设置绘制中心（默认为屏幕左上角）
+			// 3.绘制表盘
+			drawBg();
+			// 4.绘制时间刻度
+			drawScale();
+
+			// 5.绘制表针
+			pointerMove();
+			//  还原绘画环境
+			ctx.restore(); //一定要有！！！！！！！
+		}
+
+		let timer = setInterval(clockRun, 1000);
+		// 由于定时器不会立即执行，所以进入页面时手动绘制一次、
+		clockRun();
+	</script>
+</html>

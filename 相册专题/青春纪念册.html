@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>青春纪念册</title>
+	<link rel="stylesheet" href="css/case6.css">
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<ul class="picBox"></ul>
+		</div>
+		<div class="controller">
+			<span class="pre"></span>
+			<span class="next"></span>
+		</div>
+	</div>
+</body>
+<script src="./js/jquery-3.4.1.js"></script>
+<script>
+	let $picBox = $(".picBox");
+	//·······················超过6张就卡爆、、、、、、、、、、、、、、、、、、
+	let picNum = 6;
+	
+	// 1.装饰(书本的元素)
+	$picBox.append($("<li class='decoration-top'></li>"));
+	$picBox.append($("<li class='decoration-center'></li>"));
+	$picBox.append($("<li class='decoration-bottom'></li>"));
+	
+	// 2.封面
+	let $el = $("<li class='item'></li>");
+	$el.css({
+		"zIndex" : picNum + 1,
+		"backgroundColor" : "brown"
+	})
+	$picBox.append($el);//封面
+	
+	
+	// 3.图片
+	for(let i = 0; i < picNum; i++) {
+		let url = "./img/case3/" + (i+1) + ".jpg";
+		
+		
+		let $el = $("<li class='item'></li>");
+		$el.css({
+			"background" : "url("+url+")",
+			"backgroundSize" : "cover",
+			"zIndex" : picNum - i,
+		})
+		$picBox.append($el);
+	}
+	// 4.打底图
+	// 所有图片最后的垫底图片(不会切换)
+	$picBox.append($("<li class='bg'></li>"))
+	
+	
+	
+	
+	// 5.图片翻页
+	let $pics = $picBox.children(".item"),//所有图片
+		$pre = $(".controller .pre"),
+		$next = $(".controller .next"),
+		currentIdx = -1;
+		
+	$pre.on("click",()=>{
+		$($pics[currentIdx]).css({
+			"transform" : "rotateY(0deg)",
+			"zIndex" : picNum + 2 - currentIdx
+		})
+		if(currentIdx > -1) {
+			currentIdx -= 1;
+		}else{
+			currentIdx = -1;
+		}
+		
+	})
+	
+	
+	$next.on("click",()=>{
+		if(currentIdx < picNum){
+			currentIdx += 1;
+		}else{
+			currentIdx = picNum;
+		}
+		
+		$($pics[currentIdx]).css({
+			"transform" : "rotateY(-"+(180-currentIdx/10)+"deg)",
+			"zIndex" : currentIdx + 1
+		})
+	})
+	
+</script>
+</html>

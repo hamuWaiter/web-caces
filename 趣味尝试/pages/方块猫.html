@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>招财猫加载动画（css）</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+				box-sizing: border-box;
+			}
+
+			ul li {
+				list-style: none;
+			}
+
+			.box {
+				width: 100%;
+				height: 100vh;
+				background-color: antiquewhite;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.catBox {
+				width: 1200px;
+				height: 80%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding-top: 60px;
+				position: relative;
+			}
+			.cat{
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+			.head {
+				width: 300px;
+				height: 250px;
+				position: relative;
+				/* border-radius: 50%; */
+				background-color: antiquewhite;
+				animation: head 4s linear infinite;
+			}
+			
+			@keyframes head{
+				0%{
+					width: 300px;
+				}
+				50%{
+					width: 350px;
+				}
+				100%{
+					width: 300px;
+				}
+			}
+			
+			
+			.beardBox,.earBox,.eyeBox{
+				width: 300px;
+				margin: 0 auto;
+				height: 10px;
+			}
+			.head .ear {
+				position: absolute;
+				display: inline;
+				border-width: 60px 30px;
+				border-style: solid;
+				border-color: transparent transparent darkred transparent;
+				animation: ear 4s linear;
+			}
+			
+			@keyframes ear{
+				0%{
+					opacity: 1;
+				}
+				50%{
+					opacity: 0.5;
+				}
+				100%{
+					opacity: 1;
+				}
+			}
+
+			.head .ear.left,
+			.head .ear.right {
+				bottom: 100%;
+			}
+
+			.head .ear.left {
+				left: 0;
+			}
+
+			.head .ear.right {
+				right: 0;
+			}
+			.head .eyeBox{
+				position: absolute;
+				left: 50%;
+				transform: translateX(-50%);
+				background-color: transparent;
+				top: 20%;
+			}
+			.head .eyes.left,
+			.head .eyes.right {
+				position: absolute;
+				width: 100px;
+				height: 40px;
+				border-radius: 50%;
+				background-color: #333;
+				/* top: 20%; */
+			}
+			
+			@keyframes left{
+				0%{
+					transform: rotate(10deg);
+				}
+				50%{
+					transform: rotate(0deg);
+				}
+				100%{
+					transform: rotate(10deg);
+				}
+			}
+			@keyframes right{
+				0%{
+					transform: rotate(-10deg);
+				}
+				50%{
+					transform: rotate(0deg);
+				}
+				100%{
+					transform: rotate(-10deg);
+				}
+			}
+			
+			.head .eyes.left {
+				left: 10%;
+				transform: rotate(10deg);
+				animation: left 4s linear infinite;
+			}
+
+			.head .eyes.right {
+				right: 10%;
+				transform: rotate(-10deg);
+				animation: right 4s linear infinite;
+			}
+
+			.head .eyeball {
+				width: 110%;
+				height: 100%;
+				background-color: antiquewhite;
+				position: absolute;
+				top: 4px;
+				left: -4px;
+				border-radius: 50%;
+			}
+			.head .beardBox{
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translateX(-50%);
+				background-color: transparent;
+			}
+			.head .beard {
+				position: absolute;
+			}
+
+			.head .beard.left {
+				left: 10%;
+			}
+
+			.head .beard.right {
+				right: 10%;
+				transform: rotateY(180deg);
+			}
+
+			.head .beard li {
+				width: 60px;
+				height: 2px;
+				margin: 4px;
+				background-color: black;
+				transform-origin: 100% 0 0;
+			}
+
+			.head .beard li:first-child {
+				transform: rotate(20deg);
+			}
+
+			.head .beard li:last-child {
+				transform: rotate(-20deg);
+			}
+			
+			.head .nose-and-mouse{
+				position: absolute;
+				width: 140px;
+				height: 80px;
+				left: 50%;
+				transform: translateX(-50%);
+				top: 70%;
+			}
+			.head .nose{
+				width: 40px;
+				height: 20px;
+				background-color: darkred;
+				border-radius: 50%;
+				margin: 0 auto;
+			}
+			.head .mouth{
+				z-index: -1;
+				position: absolute;
+				width: 50%;
+				height: 40px;
+				background-color: brown;
+				border-radius: 50%;
+				top: 0px;
+			}
+			.head .mouth.left{
+				left: 0;
+			}
+			.head .mouth.right{
+				right: 0;
+				transform: rotateY(180deg);
+			}
+			.head .mouth .cover{
+				position: absolute;
+				bottom: 10px;
+				right: -4px;
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				background-color: antiquewhite;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="catBox">
+				<div class="cat">
+					<div class="head">
+						<!-- 耳朵 -->
+						<div class="earBox">
+							<div class="ear left"></div>
+							<div class="ear right"></div>
+						</div>
+						<!-- 眼睛 -->
+						<div class="eyeBox">
+							<div class="eyes left">
+								<div class="eyeball"></div>
+							</div>
+							<div class="eyes right">
+								<div class="eyeball"></div>
+							</div>
+						</div>
+						<!-- 胡须 -->
+						<div class="beardBox">
+							<ul class="beard left">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+							<ul class="beard right">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</div>
+						<!-- 鼻子和嘴 -->
+						<div class="nose-and-mouse">
+							<!-- 鼻子 -->
+							<div class="nose"></div>
+							<!-- 嘴 -->
+							<div class="mouth left">
+								<div class="cover"></div>
+							</div>
+							<div class="mouth right">
+								<div class="cover"></div>
+							</div>
+						</div>
+					</div>
+					<div class="body">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

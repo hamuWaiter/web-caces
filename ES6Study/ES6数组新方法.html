@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6数组新方法</title>
+	</head>
+	<body>
+		<script>
+			// map/reduce/filter/forEach
+			// 1.map(映射)，进多少出多少
+			let score = [82,95,70,62,88,90,99,58];
+			let level = score.map(item=>{
+				return item > 60 ? "及格" : "不及格"
+			})
+			console.log(level);
+			
+			// 2.reduce(汇总)，多进少出
+			let average = score.reduce((tem,item,index)=>{
+				if(index < score.length-1){
+					// 小于最大索引前都是在循环执行两个相邻数相加的操作
+					return tem+item;
+				}else{
+					// 求和结束，计算平均值并返回
+					return (tem+item)/score.length;
+				}
+			})
+			console.log(average);
+			
+			// 3.filter(过滤器)，多进少出
+			let betterScore = score.filter(item=>{
+				return item>80;//保留大于80分的
+			})
+			console.log(betterScore);
+			
+			// 4.forEach(迭代)
+			// for循环的封装
+			score.forEach((item,index)=>{
+				console.log("索引:"+index,"值:"+item);
+			})
+		</script>
+	</body>
+</html>

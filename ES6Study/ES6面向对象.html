@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6面向对象</title>
+	</head>
+	<body>
+		<script>
+			// ES5面向对象写法为：
+			function ES5User(name,password) {
+				this.name = name;
+				this.password = password;
+			}
+			ES5User.prototype.showName = function(){
+				// 原型方法不支持用箭头函数定义
+				console.log(this.name);
+			}
+			
+			// ES5类的继承VIPUser继承ES5User
+			function ES5VIPUser(name,password,right) {
+				// 继承User的属性
+				ES5User.call(this,name,password);
+				this.right = right;//特权
+			}
+			
+			// 继承User的原型
+			ES5VIPUser.prototype = ES5User.prototype;
+			ES5VIPUser.prototype.constructor = ES5VIPUser;
+			
+			let user1 = new ES5User("zs","65435");
+			console.log(user1);
+			user1.showName();
+			
+			let user2 = new ES5VIPUser("吸鼠霸王","65435","一刀999");
+			console.log(user2);
+			user2.showName();
+			
+			// ES6面向对象
+			class ES6User{
+				constructor(name,password){
+					this.name = name;
+					this.password = password;
+				}
+				showName(){
+					console.log(this.name)
+				}
+			}
+			
+			class ES6VIPUser extends ES6User{
+				constructor(name,password,right){
+					super(name,password);
+					// VIP特权
+					this.right = right;
+				}
+				showRight(){
+					console.log(this.right);
+				}
+			}
+			
+			let user3 = new ES6User("兄弟","5464");
+			user3.showName();
+			
+			let user4 = new ES6VIPUser("华农","2746746","真的只拿亿点点");
+		</script>
+	</body>
+</html>

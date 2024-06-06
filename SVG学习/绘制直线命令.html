@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG绘制直线</title>
+	</head>
+	<body>
+		<?xml version="1.0" standalone="no"?>
+		
+		<svg width="200px" height="200px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		
+		  <!-- 1. M命令将移动笔触，默认位置在（0,0）点-->
+		  <!-- 2. H命令绘制水平线。V命令绘制垂直线。这两个命令都只带一个参数，标明在x轴或y轴移动到的位置 -->
+		  <!-- 3. Z命令会从当前点画一条直线到路径的起点， -->
+		  
+		  <!-- 在(10,10)点绘制一个80*80的矩形： -->
+		  <!-- 绝对坐标形式：
+		  命令用大写表示(H、V)并且要明确坐标点 -->
+		  <path d="M10 10 H 90 V 90 H 10 Z" fill="transparent" stroke="black"/>
+		  <!-- 相对坐标形式
+		   命令用小写字母书写h、v,不需要考虑坐标点，只用考虑相对于当前笔触位置需要向右绘制
+		   多长距离或向下绘制多长距离，命令后面跟的是长度以及绘制方向-->
+		  <path d="M10 100 h 80 v 80 h -80 Z" fill="transparent" stroke="black"/>
+		  
+		</svg>
+	</body>
+</html>

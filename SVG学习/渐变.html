@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG渐变</title>
+	</head>
+	<body>
+		<?xml version="1.0" standalone="no"?>
+
+		<svg width="420px" height="420px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+			<!-- SVG有有两种类型的渐变：线性渐变和径向渐变。
+			你必须给渐变内容指定一个id属性，否则文档内的其他元素就不能引用它。为了让渐变能被重复使用，
+			渐变内容需要定义在<defs>标签内部，而不是定义在形状上面。 -->
+			<defs>
+				<!-- 线性渐变 -->
+				<!-- (x1,y1)、(x2,y2) 用于控制渐变的方向-->
+				<linearGradient id="Gradient2" x1="0" y1="0" x2="0" y2="1">
+					<stop offset="0%" stop-color="red" />
+					<stop offset="50%" stop-color="black" stop-opacity="0" />
+					<stop offset="100%" stop-color="blue" />
+				</linearGradient>
+				<!-- 径向渐变 -->
+				<!-- 可通过设置cx和cy属性及半径r移动渐变范围并改变它的大小，
+				fx和fy被称为焦点，焦点则描述了渐变的中心，
+				 注意：
+				 这几个参数的值是相对于填充渐变形状的宽高比来设置的0.5表示图形的中心位置-->
+				<radialGradient id="Gradient" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+					<stop offset="0%" stop-color="red" />
+					<stop offset="100%" stop-color="blue" />
+				</radialGradient>
+			</defs>
+			<!-- 线性渐变 -->
+			<rect x="140" y="10" rx="15" ry="15" width="100" height="100" fill="url(#Gradient2)" />
+			<!-- 径向渐变 -->
+			<rect x="10" y="10" rx="15" ry="15" width="100" height="100" fill="url(#Gradient)" stroke="black" stroke-width="2" />
+
+			<circle cx="60" cy="60" r="50" fill="transparent" stroke="white" stroke-width="2" />
+			<circle cx="35" cy="35" r="2" fill="white" stroke="white" />
+			<circle cx="60" cy="60" r="2" fill="white" stroke="white" />
+			<text x="38" y="40" fill="white" font-family="sans-serif" font-size="10pt">(fx,fy)</text>
+			<text x="63" y="63" fill="white" font-family="sans-serif" font-size="10pt">(cx,cy)</text>
+
+		</svg>
+	</body>
+</html>

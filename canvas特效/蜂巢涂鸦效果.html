@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>canvas蜂巢涂鸦特效</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<canvas class="myCanvas">您的浏览器不支持canvas，请更换浏览器</canvas>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		// 1.获取canvas与上下文对象
+		let canvas = $(".myCanvas"),
+			ctx = canvas[0].getContext("2d"),
+			width = $(this).width(),
+			height = $(this).height();
+		// 2.画布设置
+		canvas.attr({
+			"width": width,
+			"height": height
+		});
+		canvas.css({
+			"backgroundColor" : "#000"
+		})
+		$(window).on("resise",()=>{
+			width = $(this).width();
+			height = $(this).height();
+			canvas.attr({
+				"width": width,
+				"height": height
+			});
+		})
+		
+		function drawShape(x,y,r,num){
+			// 1.x、y、r是绘制中心和绘制半径num是绘制的多边形边数
+			
+//-------------------------------------------- 只要是绘制都要先保存绘图环境--------------------------------------------------//
+			
+			ctx.save();
+			ctx.translate(x,y);//设置绘制中心
+			ctx.globalCompositeOperation = "lighter";			
+			// ctx.clearRect(0,0,width,height);
+			ctx.beginPath();
+			ctx.moveTo(0,-r);
+			for(let i = 0; i < num-1; i++) {
+				// 通过三角函数以及第一个点获取三角的其他顶点
+				ctx.lineTo(r*Math.sin(2*Math.PI/num*(i+1)),-r*Math.cos(2*Math.PI/num*(i+1)));
+			}
+			ctx.closePath();//闭合路径
+			ctx.strokeStyle = "red";
+			// ctx.lineWidth = 4;
+			ctx.stroke();
+			ctx.restore();
+		}
+		// 鼠标每移动一次，在该位置绘制一个多边形
+		canvas.on("mousemove",(e)=>{
+			let x= e.clientX,
+				y= e.clientY;
+			drawShape(x,y,100,6);
+		})
+		
+	</script>
+</body>
+</html>

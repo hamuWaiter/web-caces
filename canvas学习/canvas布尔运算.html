@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>canvas实现布尔运算(合成图形)</title>
+	</head>
+	<body>
+		<canvas id="canvas" width="600" height="600"></canvas>
+	</body>
+	<script>
+		// globalCompositeOperation:
+		// 我们不仅可以在已有图形后面再画新图形，还可以用来遮盖指定区域(剪切效果)，
+		// 清除画布中的某些部分（清除区域不仅限于矩形，像clearRect()
+		// 方法做的那样）以及更多其他操作。
+		const canvas = document.getElementById('canvas');
+		const ctx = canvas.getContext('2d');
+		
+		//如异或(xor)
+		// 两个图形重叠的位置为透明
+		ctx.globalCompositeOperation = 'xor';
+		
+		ctx.fillStyle = 'blue';
+		ctx.fillRect(10, 10, 100, 100);
+		
+		ctx.fillStyle = 'red';
+		ctx.fillRect(50, 50, 100, 100);
+		
+	</script>
+</html>

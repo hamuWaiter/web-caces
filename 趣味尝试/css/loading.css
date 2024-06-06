@@ -1,0 +1,152 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+ul li {
+	list-style: none;
+}
+
+span {
+	display: block;
+}
+
+.box {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.loading-box {
+	width: 100%;
+	height: 100vh;
+	outline: 1px solid darkred;
+	position: relative;
+	overflow: hidden;
+	background-color: antiquewhite;
+}
+
+.sun {
+	position: absolute;
+	top: 10%;
+	left: 6%;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	background: linear-gradient(#e8361c, #f7c691);
+}
+
+.txt-box {
+	position: fixed;
+	bottom: 30px;
+	top: 10px;
+	background: linear-gradient(to right, #dc0000 80%, transparent);
+	padding: 10px 100px 10px 10px;
+	height: 20px;
+	animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+	0% {
+		right: 0;
+	}
+
+	50% {
+		right: 20px;
+	}
+
+	100% {
+		right: 0;
+	}
+}
+
+.loading-txt:before {
+	content: "";
+	position: absolute;
+	top: 0px;
+	right: 100%;
+	border-width: 20px;
+	border-style: solid;
+	border-color: transparent #dc0000 transparent transparent;
+}
+
+.loading-txt {
+	color: #fdb747;
+	font-size: 16px;
+	line-height: 20px;
+}
+/* 一群山 */
+.mountainBox{
+	position: absolute;
+	bottom: 10%;
+	height: 400px;
+	width: 600px;
+	overflow: hidden;
+	overflow: hidden;
+}
+.mountainBox.left{
+	left: 0px;
+}
+.mountainBox.right{
+	right: 0px;
+	transform: rotateY(180deg);
+}
+/* 一座山 */
+.mountainBox .mountain{
+	position: absolute;
+	top: 0%;
+	width: 400px;
+	height: 100%;
+	overflow: hidden;
+}
+.mountain .bg{
+	position: absolute;
+	top: 10%;
+	width: 100%;
+	height: 200%;
+	border-radius: 50%;
+	background-color: #faebd7;
+}
+.bg span{
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background: linear-gradient(#025C64 2%,transparent,transparent,transparent);
+}
+.mountainBox .mountain:nth-child(1){
+	transform: translateX(-50%);
+	width: 400px;
+	height: 100%;
+}
+.mountainBox .mountain:nth-child(2){
+	width: 400px;
+	height: 100%;
+	top: 20%;
+}
+.mountainBox .mountain:nth-child(3){
+	width: 200px;
+	height: 50%;
+	top: 20%;
+	left: 60%;
+}
+.mountainBox .mountain:nth-child(4){
+	width: 60px;
+	height: 20%;
+	top: 10%;
+	left: 50%;
+}
+.mountainBox .mountain:nth-child(5){
+	width: 60px;
+	height: 60%;
+	top: 10%;
+	left: 60%;
+}
+.mountainBox.right .mountain:nth-child(3){
+	width: 100px;
+	height: 25%;
+	top: 4%;
+	left: 40%;
+}
+

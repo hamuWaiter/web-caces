@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>龙王传说图片魔法阵</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/case5.css">
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<ul class="picBox"></ul>
+		</div>
+	</div>
+</body>
+<script src="./js/jquery-3.4.1.js"></script>
+<script>
+	let number = 14;
+	let deg = 360 / number;
+	let $picBox = $(".picBox");
+	let $el;
+	
+	for(let i = 0; i < number; i++) {
+		$el = $("<li></li>");
+		$el.css({
+			"transform" : "rotateY(" + (i*deg) + "deg) rotateX(6deg) translateZ(1600px)",
+			"background" : "url('./img/case4/"+ (i+1) +".jpg')",
+			"backgroundSize" : "cover",
+			// "opacity" : 0.6
+		})
+		$picBox.append($el);
+	}
+</script>
+</html>

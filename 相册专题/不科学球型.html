@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>相册</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" type="text/css" href="css/case3.css"/>
+</head>
+<body>
+	<div class="box">
+		<div class="cover"></div>
+		<div class="container">
+			<ul class="pics">
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				<li class="item"><img src="img/public/original24.jpg" ></li>
+				
+			</ul>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script type="text/javascript">
+		let $img = $(".pics img"),
+			$pics = $(".pics .item"),
+			picLen = $pics.length,
+			$picBox = $(".pics");
+			
+		// 1.根据图片大小设置li图片盒子大小
+		$picBox.css({
+			"height" : $($img[0]).height() + "px",
+		})
+		// 2.布局开始
+		// 2.1将所有图片划分为(8,6)的二维数组存储
+		let imgArr = [],
+			imgLen = 0;
+		let yDirNum = 5
+			xDirNum = 5,
+			yStep = Math.floor(360 / yDirNum),
+			xStep = Math.floor(360 / xDirNum);
+		
+		let tem = [],
+			temLen = 0,
+			current = 1;//用于判断tem的长度是否达到要求
+		for(let i = 0 ; i < picLen ; i++) {
+			tem.push($pics[i]);
+			temLen = i+1 % yDirNum;//temLen是中间数组tem的长度
+			
+			if(temLen/yDirNum === current) {//通过垂直方向一圈的数量在水平方向上分组图片
+				//生成二图片维数组
+				if(imgLen < xDirNum) {
+					imgArr.push(tem);
+				}
+				tem = [];
+				current = temLen/yDirNum + 1;
+				imgLen += 1;
+			}
+		}
+		
+			// 2.入场动画
+		for(let i = 0 ; i < xDirNum ; i++) {
+			// 垂直方向第一圈
+			for(let j = 0 ; j < yDirNum ; j++) {
+				$(imgArr[i][j]).css({
+					"transform" : "rotateY("+i*yStep+"deg) rotateX("+j*xStep+"deg) translateZ(300px)",
+				})
+			} 
+		}
+		
+		// 3.拖拽
+		let originDisX = -10,
+			originDisY = 0,
+			realX = 0,
+			realY = 0;
+		let $outerBox = $(".cover");
+		let $box = $(".pics");
+		$outerBox.on("mousedown", function(e) {
+			$box.css({
+				"transform": "rotateX(" + originDisX + "deg) " + "rotateY(" + originDisY + "deg)"
+			})
+			let pressPositionX = e.pageX, //鼠标按下的位置
+				pressPositionY = e.pageY,
+				changeDisX = 0,
+				changeDisY = 0;
+			$outerBox.on("mousemove", function(e) {
+		
+				changeDisX = e.pageX - pressPositionX;
+				changeDisY = e.pageY - pressPositionY;
+				realX = originDisX + changeDisY;
+				realY = originDisY + changeDisX;
+				$box.css({
+					"transform": "rotateX(" + realX + "deg) " + "rotateY(" + realY + "deg)"
+				})
+			})
+			$outerBox.on("mouseup", function() {
+				originDisX = realX; //记录鼠标松开的位置才能无缝拖拽
+				originDisY = realY;
+				$outerBox.off("mousemove"); //解绑box的鼠标移动事件
+			})
+		})
+	</script>
+</body>
+</html>

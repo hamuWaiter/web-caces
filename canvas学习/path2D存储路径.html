@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<canvas id="canvas" width="500" height="300"></canvas>
+	</body>
+	<script>
+		// 为了简化代码和提高性能，Path2D对象已可以在较新版本的浏览器中使用，
+				// 用来缓存或记录绘画命令，这样你将能快速地回顾路径。
+				function draw() {
+				  var canvas = document.getElementById('canvas');
+				  if (canvas.getContext){
+				    var ctx = canvas.getContext('2d');
+				
+				    var rectangle = new Path2D();
+				    rectangle.rect(10, 10, 50, 50);
+				    var circle = new Path2D();
+				    circle.moveTo(125, 35);
+				    circle.arc(100, 35, 25, 0, 2 * Math.PI);
+				    ctx.stroke(rectangle);
+				    ctx.fill(circle);
+				  }
+				}
+		draw();
+		
+	</script>
+</html>

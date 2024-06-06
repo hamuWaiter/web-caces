@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>demo start</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			/* cursor: none; */
+		}
+		ul li{
+			list-style: none;
+		}
+		a{
+			cursor: none;
+			display: block;
+			text-decoration: none;
+		}
+		span{
+			display: block;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			/* background-color: red; */
+			border: 1px solid black;
+		}
+		.cursor{
+			background-color: black;
+			position: absolute;
+			transform: translate(-50%,-50%);
+			transition: transform .2s linear;
+		}
+		.box{
+			position: relative;
+			background-color: rgba(255,0,0,.4);
+			/* height: 600px; */
+			height: 100vh;
+		}
+		.list{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+		}
+		.list li{
+			margin: 10px;
+			background-color: rgba(255,0,0,.4);
+			width: 10%;
+			height: 60px;
+		}
+		.list a{
+			position: relative;
+			z-index: 1;
+			width: 100%;
+			line-height: 60px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<ul class="list">
+			<li><a href="https://www.jianshu.com/p/8e1fc95a874f">1</a></li>
+			<li><a href="https://www.jianshu.com/p/8e1fc95a874f">2</a></li>
+			<li><a href="https://www.jianshu.com/p/8e1fc95a874f">3</a></li>
+			<li><a href="https://www.jianshu.com/p/8e1fc95a874f">4</a></li>
+			<li><a href="https://www.jianshu.com/p/8e1fc95a874f">5</a></li>
+			<li><a href="https://www.jianshu.com/p/8e1fc95a874f">6</a></li>
+		</ul>
+	</div>
+	<script>
+		let box = document.querySelector(".box");
+		// 鼠标进入盒子时
+		let flag = false;  //
+		let limLeft = box.offsetWidth; //环形指针可移动水平最大范围
+		let limtop = box.offsetHeight;  //垂直最大范围
+		box.addEventListener("mouseenter",function(e){
+			
+			let left = e.clientX;  //水平偏移
+			let top = e.clientY;   //垂直偏移
+			box.style.cursor = "none";   
+			//隐藏鼠标
+			if(!flag){
+				// 只生成一个圆
+				flag = !flag;
+				let p = document.createElement("span");  //创建元素
+				p.className = "cursor";  //添加类名
+				box.appendChild(p);  //追加到父元素中
+				p.style.left = left + "px";
+				p.style.top = top + "px";
+			}
+			// 获取指针
+			let cursor = box.querySelector(".cursor");
+			// 在盒子中移动时
+			box.addEventListener("mousemove",function(e){
+				
+				left = e.clientX;
+				top = e.clientY;
+				if(top < limtop){
+					cursor.style.left = left + "px";
+					cursor.style.top = top + "px";
+				}else{
+					cursor.style.left = left + "px";
+					cursor.style.top = limtop + "px";
+				}
+				
+			})
+		})
+	
+		let a = document.querySelectorAll("a");
+		let len = a.length;
+		for(let i = 0; i < len; i++) {
+			a[i].onmouseenter = function(){
+				let cursor = box.querySelector(".cursor");
+				cursor.style.backgroundColor = "transparent";
+				cursor.style.transform = "scale(.5)";
+			}
+			a[i].onmouseleave = function(){
+				let cursor = box.querySelector(".cursor");
+				cursor.style.backgroundColor = "black";
+				cursor.style.transform = "scale(1)";
+			}
+		}
+	</script>
+</body>
+</html>

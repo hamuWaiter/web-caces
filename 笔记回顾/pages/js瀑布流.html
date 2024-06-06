@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>js实现瀑布流(水平依次排开)</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			.list {
+				position: relative;
+			}
+
+			.list li {
+				list-style: none;
+				background-color: antiquewhite;
+				border-radius: 6px;
+				overflow: hidden;
+				display: inline-block;
+				position: absolute;
+				padding-bottom: 10px;
+			}
+
+			img {
+				display: block;
+				width: 100%;
+			}
+
+			p {
+				line-height: 2em;
+				font-size: 16px;
+				color: #333;
+				padding-left: 6px;
+				background-color: antiquewhite;
+			}
+
+			.buy {
+				position: relative;
+			}
+
+			.buy button {
+				border: none;
+				background-color: darkorange;
+				padding: 4px 6px;
+				position: absolute;
+				top: 0;
+				right: 6px;
+				border-radius: 4px;
+				outline: none;
+				cursor: pointer;
+				font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<ul class="list"></ul>
+		</div>
+	</body>
+	<script src="../js/jquery-3.4.1.js"></script>
+	<script>
+		
+		// 全局参数设置：
+		let	columnNum = 5,
+			dis = 10,
+			deviceWidth = window.innerWidth,
+			itemWidth = (deviceWidth - (columnNum - 1) * dis) / columnNum;
+		
+		//item初始化
+		(function initItem(width){
+			// 使用时传入要设置的item宽度
+			let $list = $(".list");//ul容器
+			$list.empty();//清空容器
+			//item模板
+			let	$com = $(`<li class="item">
+					<a href="##"><img src=""></a>
+					<p>清凉夏日劲装，你值得拥有~</p>
+					<div class="buy">
+						<p>$233.<span style="font-size: 16px; ">00</span></p>
+						<button>立即购买</button>
+					</div>
+				</li>`);
+				
+			let	number = 0; //图片索引
+			// 生成item
+			for (let i = 0; i < 20; i++) {
+				let $el = $com.clone(); //复制模板
+				$el.width(width);
+				number = Math.round(Math.random() * 20) + 1;
+				$el.find("img").attr({
+					"src": `../img/${number}.jpg`
+				});
+				$list.append($el);
+			}
+		})(itemWidth);
+		
+//js瀑布流布局核心代码
+ 
+		function reRenderItem() {
+			let $item = $(".item"),//重新获取下图片
+				len = $item.length; 
+			let top = [], //每个图片的top参数
+				left = [], //每个图片的left参数
+				columnIndex = 0; // 图片的列序号
+			
+			// 2.1 先更改item宽度
+			$item.width(itemWidth);
+			// 2.2 初始化列高数组并渲染第一行
+			for(let i = 0; i < columnNum; i++) {
+				left[i] = i * (itemWidth + dis);
+				$($item[i]).css({
+					"left": left[i] + "px"
+				});
+				top[i] = $($item[i]).height() + 2*dis;
+			}
+			
+			// 2.3 从第二行开始渲染后面的图片
+			let minIdx = 0;
+			for(let i = columnNum; i < len; i++) {
+				// 寻找上一行布局后高度最低的列
+				minIdx = getMinIdx(top);
+				$($item[i]).css({
+					"left" : left[minIdx] + "px",
+					"top" : top[minIdx] + "px"
+				});
+				top[minIdx] += $($item[i]).height() + 2*dis;
+			}
+		}
+		// 获取数组最小值的下标
+		function getMinIdx(arr){
+			// 初始化最小值为第一个数组元素
+			let min = arr[0];
+			arr.forEach(item => {
+				if(item < min){
+					min = item;
+				}
+			})
+			return arr.indexOf(min);
+		}
+		
+		// 调整窗口时改变item宽度
+		$(window).on("load",reRenderItem).on("resize",()=>{
+			deviceWidth = window.innerWidth,
+			itemWidth = (deviceWidth - (columnNum - 1) * dis) / columnNum;
+			reRenderItem();
+		});
+	</script>
+</html>

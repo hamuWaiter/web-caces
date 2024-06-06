@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>generator和async</title>
+	</head>
+	<body>
+		<script>
+		// 1.generator(生成器)是ES6中能够在函数执行中
+		// 中断函数执行的新特性，同时也是promise的进一步封装
+			
+		// 2.async是ES7中对ES6的generator的进一步封装，更好用
+			
+//generator、async与Promise.all()不同之处在于前者可以方便地处理
+// 带有逻辑的数据请求(后一个数据请求依赖于前一个数据请求的结果),
+ // promise.all()只能一次请求一堆数据不带有逻辑
+			
+			//generator:
+			function *createInterator() {
+				console.log(12);
+				console.log(5);
+				yield;
+				console.log(8);
+			}
+			let interator = createInterator();//迭代器（可迭代对象）
+			// console.log(interator)
+			// interator.next();//输出12、5后遇到yield中断执行
+			// interator.next();//继续执行，输出8
+			
+			
+			//等价于: 
+			
+			for(let i of interator){
+				// 循环迭代器
+				// console.log(i);什么都不用写，
+			}
+			
+		// 用generator处理带有逻辑的数据请求
+	// 以下代码皆为伪代码。。。。
+		
+		// function *createInterator() {
+		// 	let user = yield $.ajax({url:"",dataType:"json"},success(res){
+		// 		resolve(res);
+		// 	});
+		// 	if(user.type=="VIP"){
+		// 		let vipItem = yield $.ajax({url:"vipItem",dataType:"json"},success(res){
+		// 			resolve(res);
+		// 		});
+		// 	}else{
+		// 		let item = yield $.ajax({url:"item",dataType:"json"},success(res){
+		// 			resolve(res);
+		// 		});
+		// 	}
+		
+		// }
+		
+		// 用ES7 async处理带有逻辑的数据请求
+		// 一下代码皆为伪代码。。。。
+		// async异步函数内,代码执行是同步的,执行完一条再执行下一条
+		// async function asyncData(){
+		// 	let user = await $.ajax({url:"",dataType:"json"},success(res){
+		// 		resolve(res);
+		// 	});
+		// 	if(user.type=="VIP"){
+		// 		let vipItem = await $.ajax({url:"vipItem",dataType:"json"},success(res){
+		// 			resolve(res);
+		// 		});
+		// 	}else{
+		// 		let item = await $.ajax({url:"item",dataType:"json"},success(res){
+		// 			resolve(res);
+		// 		});
+		// 	} 
+		// }
+		// asyncData();
+		</script>
+	</body>
+</html>

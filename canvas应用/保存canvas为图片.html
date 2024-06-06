@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>将canvas保存为图片</title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#canvas{
+				border: 1px dashed black;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="600" height="300"></canvas>
+		<!-- 用于显示canvas画布的当前数据 -->
+		<img id="show" src="" alt="">
+		<a id="download" href="" download="">保存图片到本地</a>
+		<script>
+			// canvas提供一个toDataURL()方法，此方法在保存图片的时候非常有用。
+			// canvas.toDataURL('image/png')
+			// 	默认设定。创建一个PNG图片。
+			// canvas.toDataURL('image/jpeg', quality)
+			// 	创建一个JPG图片。你可以有选择地提供从0到1的品质量，1表示最好品质，
+			// 	0基本不被辨析但有比较小的文件大小。
+			// 当你从画布中生成了一个数据链接，例如，你可以将它用于任何<image>元素，
+			// 或者将它放在一个有download属性的超链接里用于保存到本地。
+			let img = new Image();
+			img.src = "images/2.jpg";
+			let canvas = document.getElementById("canvas"),
+				ctx = canvas.getContext("2d");
+			img.onload = ()=>{
+				ctx.drawImage(img,0,0);
+			}
+			
+			// 用于显示当前canvas的数据
+			let showBox = document.getElementById("show");
+			let download = document.getElementById("download");
+			//用于保存当前的canvas的数据
+			let saveImg;
+			
+			download.onclick = ()=>{
+				// 保存最佳图像品质
+				// saveImg = canvas.toDataURL('image/png');
+				// 可选择图像的品质，0品质最差，1品质最高
+				saveImg = canvas.toDataURL('image/jpeg', 1);
+				// 显示canvas中的数据
+				showBox.src = saveImg;
+				
+				// 保存canvas图片数据到本地
+				download.href = saveImg;
+				download.download = "canvas.jpg";
+				console.log(download);
+			}
+			
+		</script>
+	</body>
+</html>

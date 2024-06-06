@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>图片分块</title>
+	<link rel="stylesheet" href="./css/swiper01.css">
+</head>
+<body>
+	<div class="box">
+		
+	</div>
+	<div class="controller">
+		<!-- 切换控件 -->
+		<span class="pre"></span>
+		<span class="next"></span>
+	</div>
+</body>
+<script src="./js/jquery-3.4.1.js"></script>
+<script src="./js/swiper01.js">分块轮播图插件</script>
+<script>
+	peiceInOutSwiper(["./img/swiper01/1.jpg","./img/swiper01/2.jpg","./img/swiper01/3.jpg","./img/swiper01/4.jpg"],
+	$(".box"),$(".controller .pre"),$(".controller .next"));
+</script>
+</html>

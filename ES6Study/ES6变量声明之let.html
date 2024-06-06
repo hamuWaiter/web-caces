@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>3.Call、apply、bind</title>
+	</head>
+	<body>
+		<script>
+			// 均用于改变this指向
+			// Call / apply立即调用函数
+			// bind绑定完this后不会立即调用当前函数， 而是将函数返回， 因此后面要加（） 才能调用
+			// 问： 为什么ES5中药加入bind方法来改变this指向呢？
+			// 答： 因为bind不会立即调用当前函数
+			// Bind通常使用在回调函数中， 因为回调函数不会立即调用， 如果
+			// 希望在回调函数中改变this， 不妨使用bind。
+			
+			// call的引用例子（ES5类的继承）
+			function User(name,password){
+				this.name = name;
+				this.password = password;
+			}
+			function VipUser(name,password,level){
+				//在当前作用域调用User方法，相当于执行了User构造函数的
+				// this.name = name;
+				// this.password = password;
+				// 调用时把name、password参数传入即可：
+				User.call(this,name,password);
+				this.level = level;
+			}
+			
+			let user = new User("zs","123");
+			let vipUser = new VipUser("wu","564",99);
+			
+			console.log(user);
+			console.log(vipUser);
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>滚动插件</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			-webkit-user-select: none;
+			overflow: auto;
+		}
+		/* body::-webkit-scrollbar{
+			display: none;
+		} */
+		.go-top{
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			width: 80px;
+			height: 40px;
+			border-radius: 20px;
+			background-color: #FFC0CB;
+			text-align: center;
+			line-height: 40px;
+			color: #FF0000;
+			text-shadow: 1px 1px 4px #EB8088;
+			cursor: pointer;
+		}
+		.img{
+			width: 1000px;
+			margin: 0 auto;
+			height: 100vh;
+			border: 1px solid red;
+			position: relative;
+			overflow: hidden;
+		}
+		.swiper{
+			width: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			display: flex;
+		}
+		img{
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="img">
+		<div class="swiper">
+			<img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+			<img src="images/1.jpg" ><img src="images/1.jpg" >
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script src="js/scrollto.js"></script>
+	<script>
+		
+		function diyGoTo(el,target){
+			// 用于水平移动。
+			// 当前位置
+			var current = $(el).position().left;
+			var moveToRight = current > target ? false : true;
+			var timer1 = null;
+			timer1 = setInterval(function(){
+				
+				if(moveToRight){
+					current += 4;
+				}else{
+					current -= 4;
+				}
+				if(Math.abs(current) >= Math.abs(target)){
+					clearInterval(timer1);
+					timer1 = null;
+				}
+				$(el).css({
+					"left" : (-current) + "px",
+				});
+			},16.6);
+		}
+		diyGoTo($(".swiper"),800);
+	</script>
+</body>
+</html>

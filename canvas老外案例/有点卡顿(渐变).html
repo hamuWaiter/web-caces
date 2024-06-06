@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Canvas Lighting, Color, and Texture Effect</title>
+<style type="text/css">
+html,
+body {
+	height: 100%;	
+}
+
+body {
+	background: #111;
+	background: radial-gradient(#333, #111);
+	overflow: hidden;
+}
+
+canvas {
+	background: #fff;
+	box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.1);
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+</style>
+
+<body>
+	
+<canvas id="c"></canvas>
+
+<script src="js/jquery-3.4.1.js"></script>
+	
+
+<script type="text/javascript">
+// general vars
+var c = document.getElementById( 'c' ),
+	ctx = c.getContext( '2d' ),
+	w = c.width = 800,
+	h = c.height = 500;
+
+// random range helper
+function rand( min, max ) {
+	return Math.random() * ( max - min ) + min;
+}
+
+// left side base color
+ctx.fillStyle = 'hsl(220, 100%, 95%)';
+ctx.fillRect( 0, 0, w / 2, h );
+
+// right side base color
+ctx.fillStyle = 'hsl(220, 60%, 50%)';
+ctx.fillRect( w / 2, 0, w / 2, h );
+
+// four stripes
+ctx.fillStyle = 'hsla(0, 0%, 0%, 0.1)';
+ctx.fillRect( 0, 0, w / 6, h );
+ctx.fillRect( ( w / 6 ) * 2, 0, w / 6, h );
+ctx.fillRect( ( w / 6 ) * 3, 0, w / 6, h );
+ctx.fillRect( ( w / 6 ) * 5, 0, w / 6, h );
+
+// noise
+// cache and draw as image for better performance
+// very expensive to do this each frame
+for( var x = 0; x < w; x++ ) {
+	for( var y = 0; y < h; y++ ) {
+		ctx.fillStyle = 'hsla(0, 0%, '+ rand( 0, 100 ) + '%, 0.02)';
+		ctx.fillRect( x, y, 1, 1 );
+	}
+}
+
+// scan lines
+// cache and draw as image for better performance
+// very expensive to do this each frame
+for( var y = 0; y < h; y += 1 ) {
+	if( y % 2 === 0 ) {
+		ctx.fillStyle = 'hsla(0, 0%, 0%, 0.1)';
+	} else {
+		ctx.fillStyle = 'hsla(0, 0%, 100%, 0.05)';
+	}
+	ctx.fillRect( 0, y, w, 1 );
+}
+
+// overlay vignette gradient
+// only create gradient once at start of program
+// then use as fill style from then on
+var grad1 = ctx.createRadialGradient(
+		w / 2,
+		h / 2,
+		0,
+		w / 2,
+		h / 2,
+		h
+	);
+grad1.addColorStop( 0, 'hsl(0, 0%, 100%)' );
+grad1.addColorStop( 1, 'hsl(0, 0%, 0%)' );
+ctx.globalCompositeOperation = 'overlay';
+ctx.fillStyle = grad1;
+ctx.fillRect( 0, 0, w, h );
+
+// color splash gradient
+// only create gradient once at start of program
+// then use as fill style from then on
+var grad2 = ctx.createRadialGradient(
+		w,
+		h / 2,
+		0,
+		w,
+		h / 2,
+		w * 0.8
+	);
+grad2.addColorStop( 0, 'hsla(340, 80%, 50%, 1)' );
+grad2.addColorStop( 1, 'hsla(340, 0%, 0%, 0)' );
+ctx.globalCompositeOperation = 'color';
+ctx.fillStyle = grad2;
+ctx.fillRect( 0, 0, w, h );
+
+  </script>
+	
+</body>      

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>斗罗大陆</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</head>
+	<body ondragstart="return false">
+		<div class="box">
+			<div class="bg-img">
+				<img src="img/bgs/2.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/3.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/6.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/7.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/8.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/9.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/10.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/11.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/12.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/13.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/35.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/14.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/24.jpeg" alt="" class="bounce-bg">
+				<img src="img/bgs/16.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/17.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/18.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/19.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/20.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/21.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/22.jpg" alt="" class="bounce-bg">
+				<img src="img/bgs/23.jpg" alt="" class="bounce-bg">
+			</div>
+			<div class="cover"></div>
+			<div class="img-container">
+				<ul class="imgs on">
+					<!-- 内 -->
+					<li class="item"><img src="img/pics/1.jpg"></li>
+					<li class="item"><img src="img/pics/2.jpg"></li>
+					<li class="item"><img src="img/pics/3.jpg"></li>
+					<li class="item"><img src="img/pics/4.jpg"></li>
+					<li class="item"><img src="img/pics/5.jpg"></li>
+					<li class="item"><img src="img/pics/6.jpg"></li>
+					<!-- 外 -->
+					<li class="item"><img src="img/pics/7.jpg"></li>
+					<li class="item"><img src="img/pics/8.jpg"></li>
+					<li class="item"><img src="img/pics/9.jpg"></li>
+					<li class="item"><img src="img/pics/10.jpg"></li>
+					<li class="item"><img src="img/pics/11.jpg"></li>
+					<li class="item"><img src="img/pics/12.jpg"></li>
+					<!-- 魂环 ：动画，从上到下逐渐出现-->
+					<div class="container">
+						<img src="img/soul/橙金色.png">
+					</div>
+					<div class="container">
+						<img src="img/soul/红色.png">
+					</div>
+					<div class="container">
+						<img src="img/soul/黑色.png">
+					</div>
+				</ul>
+			</div>
+			<audio id="audio" src="./audio/BGM2.mp3" autoplay="autoplay" loop="loop">当前浏览器不支持audio</audio>
+			<div class="music"></div>
+			<div class="playing">
+				<img src="icon.jpg" >
+				<span></span>
+			</div>
+		</div>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+			// 相册以及魂环的入场动画
+			//1.相册入场动画 
+			let $box = $(".imgs"); //拖拽的对象
+			let $pictures = $(".imgs li");
+			let picLen = $pictures.length;
+			let angle = 360 / picLen; //每张图的间隔角度
+
+			for (let i = 0; i < picLen; i++) {
+				if (i % 2) {
+					//偶数图片入场方式
+					$($pictures[i]).css({
+						"transform": "rotateY(" + i * angle + "deg) " + "translateZ(360px)",
+						"opacity" : 1,
+						"transitionDelay": (5.6 - i / 10) + "s"
+					})
+				} else {
+					//奇数图片入场方式
+					$($pictures[i]).css({
+						"transform": "rotateY(" + i * angle + "deg) " + "translateZ(200px)",
+						"opacity" : 1,
+						"transitionDelay": (5.6 - i / 10) + "s"
+					})
+				}
+
+			}
+
+			// 2.魂环入场动画
+			let $soulBox = $(".container");
+			let $soulCircle = $(".container img");
+			let soulCircleLen = $soulCircle.length;
+			let moveDis = $box.height();
+
+			for (let i = 0; i < picLen; i++) {
+				$($soulCircle[i]).css({
+					"transform": "scale(" + (1.4 - i * 0.6) + ") " + "rotateZ(" + i * 45 + "deg)",
+				})
+				$($soulBox[i]).css({
+					"top": moveDis,
+					"opacity" : 1,
+					"transitionDelay": (i / 2 + 3) + "s"
+				})
+			}
+			
+		</script>
+		<script>
+			// 相册
+			let $dragBox = $(".cover");
+
+
+			// 		1.$box拖拽的视图更新与其animation不能同时进行，也就是说，当开始拖拽时
+			// 要先将其animation设置为none，拖拽结束再加上....
+			// 		2.貌似通过animation改变的rotate的值也不能反映到真实的rotate值上去，也就是获取的
+			// rotate值跟实际上的不一样
+			let timer = null;
+			let originDisX = -10,
+				originDisY = 0,
+				realX = 0,
+				realY = 0;
+			// 1.自动转动(通过更改originDisX、originDisY再设置到imgs元素的transform上去
+			// 而不是直接通过animation、设置动画)
+			$(window).on("load", function() {
+				setTimeout(function() {
+					timer = setInterval(rotateStart, 15)
+				}, 4000)
+			})
+
+			function rotateStart() {
+				originDisY += 0.25;
+				if(originDisY % 360 === 90) {
+					$box.toggleClass("on").addClass("off");
+				}else if(originDisY % 360 === 270){
+					$box.toggleClass("off").addClass("on");
+				}else if(originDisY === 360) {
+					originDisY = 0;
+				}
+				$box.css({
+					"transform": "rotateX(" + originDisX + "deg) " + "rotateY(" + originDisY + "deg)"
+				})
+			}
+			$dragBox.on("mousedown", () => {
+				clearInterval(timer);
+				timer = null;
+				setTimeout(function() {
+					timer = setInterval(rotateStart, 15)
+				}, 3000)
+			})
+			// 2.拖拽
+			$dragBox.on("mousedown", function(e) {
+				$box.css({
+					"transform": "rotateX(" + originDisX + "deg) " + "rotateY(" + originDisY + "deg)"
+				})
+				let pressPositionX = e.pageX, //鼠标按下的位置
+					pressPositionY = e.pageY,
+					changeDisX = 0,
+					changeDisY = 0;
+				$dragBox.on("mousemove", function(e) {
+
+					changeDisX = e.pageX - pressPositionX;
+					changeDisY = e.pageY - pressPositionY;
+					realX = originDisX + changeDisY;
+					realY = originDisY + changeDisX;
+					$box.css({
+						"transform": "rotateX(" + realX + "deg) " + "rotateY(" + realY + "deg)"
+					})
+				})
+				$dragBox.on("mouseup", function() {
+					originDisX = realX; //记录鼠标松开的位置才能无缝拖拽
+					originDisY = realY;
+					$dragBox.off("mousemove"); //解绑box的鼠标移动事件
+				})
+				// 这一块代码会让css的transform的动画出现抖动问题。。。。。。。。。
+
+				// $box.on("mouseleave",function(){
+				// 	originDisX = realX;//记录鼠标松开的位置才能无缝拖拽
+				// 	originDisY = realY;
+				// 	$box.off("mousemove"); //解绑box的鼠标移动事件
+				// })
+			})
+		</script>
+		<script>
+			// 歌词
+			//歌曲 
+			let musicTxt =
+				`[2000] 不抛弃不放弃 - ONER
+[6000] 词：唐家三少/曹德智
+[14000] 曲：大主宰乐团/张寥/小雄/17～
+[18000] 编曲：刘鑫磊
+[22000] 制作人：刘鑫磊
+[25907] 对抗命运轨迹
+[27544] 王位选择逃避
+[29252] 武魂融合着渐行渐近的距离
+[32672] 嬉笑中被隐去
+[34311] 你脸上的痕迹
+[35838] 奋不顾身得寻觅流泪的琉璃
+[39007] 步步回首满地零落一片狼藉
+[42127] 勇气与信念书写一篇华丽崛起
+[45238] 没什么能够取代我们七怪一体
+[48510] 不抛弃不放弃
+[51949] 漫长又短暂的四季
+[56079] 如果一定经历
+[58364] 这五年柔脆的别离
+[62361] 所有的孤寂
+[64113] 独行的勇气
+[65471] 遥远的距离
+[67155] 都编织在青春的梦里
+[70298] 当我们重聚
+[71920] 疯狂被铭记
+[73525] 热泪盈眶的记忆
+[75904] 不抛弃不放弃
+[89956] 森林藏着秘密
+[91820] 鬼见愁下寻觅
+[93512] 纵身一跃只为十万年的相遇
+[96619] 凤凰被重新定义
+[98029] 思念前赴后继
+[99895] 上天入地不及你的一袭白衣
+[102783] 念念不忘所有魔鬼斗魂经历
+[106169] 后背与热血铸造同阶无敌传奇
+[109374] 没什么能够取代我们七怪一体
+[112560] 不抛弃不放弃
+[115946] 漫长又短暂的四季
+[120006] 如果一定经历
+[122346] 这五年柔脆的别离
+[126356] 所有的孤寂
+[128135] 独行的勇气
+[129481] 遥远的距离
+[131098] 都编织在青春的梦里
+[134332] 当我们重聚
+[135943] 疯狂被铭记
+[137527] 热泪盈眶的记忆
+[139867] 不抛弃不放弃
+[168707] 生命中流淌着悲喜与叹息
+[172858] 谁能坚守正义
+[175165] 那一段刻下并肩前行的记忆
+[179631] 值得被珍惜
+[183106] 漫长又短暂的四季
+[187369] 如果一定经历
+[189618] 这五年柔脆的别离
+[193729] 所有的孤寂
+[195229] 独行的勇气
+[196764] 遥远的距离
+[198319] 都编织在青春的梦里
+[201550] 当我们重聚
+[203154] 疯狂被铭记
+[204767] 热泪盈眶的记忆
+[207122] 不抛弃不放弃 `;
+			// 从别后
+			let $audio = $("#audio"); //音频对象
+
+			// 替换歌词相关变量(第4步)
+			let music, //存储以换行符分隔歌词字符串的结果
+				timeStr, //存储每一句歌词的出现时间字符串
+				musicStr, //存储每一句歌词字符串
+				timeNum; //存储每一句歌词出现时间（timeStr转换过来的毫秒数）
+
+			// 2.替换歌词
+			function replaceSongLrc(songStr) {
+				//2.1.提取歌词和时间字符串
+				music = songStr.split("\n");
+				musicStr = [];
+				timeStr = [];
+				music.forEach((item) => {
+					timeStr.push(item.split("] ")[0].replace("[", ""))
+					musicStr.push(item.split("] ")[1])
+				})
+				//2.2.将时间转换为对应的毫秒数（number型）
+				timeNum = [];
+				timeStr.forEach((item) => {
+					timeNum.push(parseInt(item) + 500)//加500是由于这首歌歌词出现时间超前的原因
+				})
+				showTxt(musicStr[0]); //让第一句歌词显现出来
+			}
+
+			// 3.初始化歌词并播放歌曲
+			replaceSongLrc(musicTxt); //当进入页面时根据歌词字符串执行一次歌词处理
+			// $audio[0].play();//歌词处理完后执行自动播放
+
+			// 4.监听播放
+			let current = 0; //现在的播放时间点
+			let idx = 0; //现在显示歌词的索引号
+			let lastIndex = musicStr.length - 1;
+			$audio.on("timeupdate", () => {
+				// 只有原生的audio对象才能获取到currentTime属性，所以要转换为原生js对象再获取
+				current = Math.floor($audio[0].currentTime * 1000);
+
+				timeNum.forEach((item, index) => {
+					if (timeNum[index] < current && timeNum[index + 1] > current) {
+						if (index === idx) return; //如果还是这句歌，就不重新出现一遍这句歌词
+						showTxt(musicStr[index]);
+						idx = index; //记录现在显示的歌词索引号
+					}
+				})
+			}).on("play", () => {
+				// duration不知道为什么非得在audio的播放事件里获取才有效全局获取无效
+				timeNum.push(Math.floor($audio[0].duration * 1000)); //执行这一步与timeupdate中的判断条件有关。。。。。
+			})
+
+			// 5.歌词显示函数
+			function showTxt(str) {
+				let $music = $(".music"); //歌词盒子
+				$music.fadeOut(0); //隐藏歌词条
+				// 1.清空上一句歌词
+				$music.empty();
+				let musicArr = str.split("");
+				//2.根据传入的歌词得到歌词文字个数
+				let len = musicArr.length;
+				//3.根据文字数目创建p元素
+				for (let i = 0; i < len; i++) {
+					let $el = $("<p>" + musicArr[i] + "</p>");
+					$el.css({
+						"fontSize": Math.random() * 10 + 20,
+						// "color": getColor()
+					})
+					$music.append($el);
+				}
+				$music.fadeIn(1000) //歌词条出现
+			}
+
+
+			// 6.随机生成颜色值(可用于第5步生成P元素时随机生成颜色)
+			// function getColor() {
+			// 	let randomNum = Math.floor(Math.random()*4);
+			// 	switch(randomNum) {
+			// 		case 0:return "rgba(0, 0, 0 ,1)" ;break;
+			// 		case 1:return "rgba(240, 0, 238 ,1)" ;break;
+			// 		case 2:return "rgba(0, 0, 0 ,1)" ;break;
+			// 		case 3:return "rgba(240, 0, 238 ,1)" ;break;
+			// 	}
+			// }
+		</script>
+		<script>
+			// 背景操作
+			let $bounceBg = $(".bounce-bg");
+			//自动随机切换背景
+			let preBgIdx = 10;
+			let bgTimer = null;
+			let bgNumber = $bounceBg.length - 1;
+			$($bounceBg[preBgIdx]).addClass("on")
+
+			function changeBg() {
+				// 1.清除上一张图片的显示
+				$($bounceBg[preBgIdx]).removeClass("on")
+				// 2.随机生成新的图片索引
+				let index = Math.round(Math.random() * bgNumber);
+				// 3.将对应索引图片的opacity置为1
+				$($bounceBg[index]).addClass("on")
+
+				// 4.记录这一次的索引作为下一次切换背景图片时清除样式的对象
+				preBgIdx = index;
+			}
+			// 2.2.开启定时器
+			bgTimer = setInterval(changeBg, 10000)
+		</script>
+	</body>
+</html>

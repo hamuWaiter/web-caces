@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6箭头函数</title>
+		<style>
+			.colorBox{
+				width: 200px;
+				height: 200px;
+				background-color: antiquewhite;
+			}
+			body{
+				margin: 0;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="colorBox"></div>
+		</div>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+			//箭头函数可简化编程提高编程效率
+			// 1.箭头函数不可使用new关键词
+			// 2.箭头函数的this与外围this相同
+				// ES5函数声明：
+			func1 = function() {
+				console.log("ES5函数声明.....");
+			}
+				// ES6箭头函数声明
+			func2 = ()=>{
+				console.log("ES6箭头函数");
+			}
+			func1();
+			func2();
+			
+			// 案例:（练习箭头函数）
+				//页面上一个div，当点击它后，每秒钟随机切换一次背景颜色 
+			let $colorBox = $(".colorBox");
+			// console.log($colorBox);
+			$colorBox.on("click",function() {
+					let rgb;
+				// setInterval(function(){//这样写的话this指的是window
+				setInterval(()=>{
+					rgb = "rgba("+Math.floor(Math.random()*256)+","
+					+Math.floor(Math.random()*256)+","
+					+Math.floor(Math.random()*256)+","+Math.random().toFixed(1)+")";
+					$(this).css({
+						"backgroundColor": rgb
+					});
+				},1000);
+				
+				// // this指向还可通过bind来更改：
+				// setInterval(function(){
+				// 	rgb = "rgba("+Math.floor(Math.random()*256)+","
+				// 	+Math.floor(Math.random()*256)+","
+				// 	+Math.floor(Math.random()*256)+","+Math.random().toFixed(1)+")";
+				// 	$(this).css({
+				// 		"backgroundColor": rgb
+				// 	});
+				// }.bind(this),1000);//相当于在当前作用域调用定时器函数，定时器的this与当前this一致
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG路径文本</title>
+	</head>
+	<body>
+		<?xml version="1.0" standalone="no"?>
+		
+		<svg width="190px" height="320px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+			<!-- 普通文本 -->
+			<text x="10" y="10">Hello World!</text>
+			
+			<!-- 路径文本 -->
+			
+			<path id="my_path" d="M10 80 Q 95 10 180 80" fill="transparent" stroke="black"/>
+			<text>
+			  <textPath xlink:href="#my_path">This text follows a curve.</textPath>
+			</text>
+			
+		</svg>
+	</body>
+</html>

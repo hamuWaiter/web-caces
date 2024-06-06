@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>使用图像</title>
+	</head>
+	<body>
+		<canvas id="canvas" width="800" height="800"></canvas>
+		<script>
+		// canvas的API可以使用下面这些类型中的一种作为图片的源：
+			
+			// 1. HTMLImageElement
+			// 这些图片是由Image()函数构造出来的，或者任何的<img>元素
+			// 2. HTMLVideoElement
+			// 用一个HTML的 <video>元素作为你的图片源，可以从视频中抓取当前帧作为一个图像
+			// 3. HTMLCanvasElement
+			// 可以使用另一个 <canvas> 元素作为你的图片源。
+			// 4. ImageBitmap
+			// 这是一个高性能的位图，可以低延迟地绘制，它可以从上述的所有源以及其它几种源中生成。
+			// 这些源统一由 CanvasImageSource类型来引用。
+			
+			// 有几种方式可以获取到我们需要在canvas上使用的图片。
+		</script>
+		<script>
+			var ctx = document.getElementById('canvas').getContext('2d');
+			var image = new Image();   // 创建img元素
+			image.src = 'images/onepeice.jpg'; // 设置图片源地址
+			image.onload = function(){
+		  // 执行drawImage语句
+			    // 一旦获得了源图对象，就可以使用 drawImage 方法将它渲染到 canvas 里。
+			    // drawImage 方法有三种形态，下面是最基础的一种:
+			    // drawImage(image, x, y)
+			    // 其中 image 是 image 或者 canvas 对象，x 和 y 是其在目标 canvas 里的起始坐标。
+				
+				// 1.直接将图片绘制到canvas
+				ctx.drawImage(image, 0, 0);
+				// 2.缩放后绘制
+				// 这个方法多了2个参数：width 和 height，这两个参数用来控制 当向canvas画入时应该缩放的大小
+				ctx.drawImage(image, 0, 0, 300, 200)
+			}
+			
+			
+		</script>
+	</body>
+</html>

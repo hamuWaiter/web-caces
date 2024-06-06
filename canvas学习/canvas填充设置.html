@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>canvas填充规则</title>
+	</head>
+	<body>
+		<canvas id="canvas" width="400" height="400"></canvas>
+		<script>
+			// 该填充规则根据某处在路径的外面或者里面来决定该处是否被填充，这对于自己与自己路径
+			// 相交或者路径被嵌套的时候是有用的。两个可能的值：
+			
+			// 1. "nonzero": non-zero winding rule, 默认值.
+			// 2. "evenodd":  even-odd winding rule.
+			
+			function draw() {
+			  var ctx = document.getElementById('canvas').getContext('2d'); 
+			  ctx.beginPath(); 
+			  ctx.arc(50, 50, 30, 0, Math.PI*2, true);
+			  ctx.arc(50, 50, 15, 0, Math.PI*2, true);
+			  ctx.fill("evenodd");
+			  // ctx.fill();
+			}
+			draw();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>不灭的花火</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				overflow: hidden;
+			}
+			#myCanvas{
+				background-color: #000000;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas">请更换更高版本浏览器</canvas>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+			let canvas = $("#myCanvas"),
+				ctx = canvas[0].getContext("2d"),
+				width = $(window).width(),
+				height = $(window).height();
+
+			canvas[0].width = width;
+			canvas[0].height = height;
+
+			
+			// 木棍类（烟花的轴）
+			class Stick{
+				constructor(x0, y0, x1, y1, lineWidth){
+					// x0,y0是绘制直线的起点
+					// x1,y1是绘制直线的终点
+					// length是长度
+					// width是宽度
+					this.x0 = x0;
+					this.y0 = y0;
+					this.x1 = x1;
+					this.y1 = y1;
+					this.width = lineWidth;
+				}
+				draw(){
+					ctx.save();
+					ctx.translate(this.x0,this.y0);
+					ctx.beginPath();
+					ctx.moveTo(0,0);//执行translate后0,0就是为设置translate时的x0,y0
+					ctx.lineTo(this.x1,this.y1);
+					ctx.closePath();
+					ctx.strokeStyle = "#291047";
+					ctx.lineWidth = this.width;
+					ctx.stroke();
+					ctx.restore();
+				}
+			}
+			// 绘制一个作曲线运动的小球
+			class Arc {
+				constructor(x, y, r, vx, vy, a, alpha) {//vy初始值最好为加速度a的帧数倍
+					// x,y为绘制位置，r为半径
+					// vx,vy是平抛/斜运动的初始速度
+					// a为垂直方向的加速度，a足够小的话可以使两个绘制点看起来是
+					// 连续的，如：
+						// vx=1，vy=-1；a=0.02；//斜抛
+						// vx=1，vy=0；a=0.02；//平抛
+						// 以上参数绘制的曲线看起来相当平滑
+						
+						// 对于向上的斜抛运动，vy初始速度为负，vx与平抛运动一致
+						// 对于平抛运动，vx设置为30，vy设置为0
+					// alpha是透明度
+					this.x = x;
+					this.y = y;
+					this.r = r;
+					this.vx = vx; //水平速度
+					this.vy = vy; //垂直速度
+					this.a = a; //竖直方向的加速度
+					
+					this.rgb = `255,${Math.floor(Math.random()*200)},0`;
+					this.alpha = alpha;
+				}
+				move() {
+					this.vy += this.a; //竖直速度等于gt，
+					this.x += this.vx;
+					this.y += this.vy;
+					this.alpha -= 0.06;
+				}
+				color(){
+					return `rgba(${this.rgb},${this.alpha})`
+				}
+				draw() {
+					ctx.save();
+					ctx.globalCompositeOperation = "lighter";
+					ctx.translate(this.x, this.y);
+					ctx.beginPath();
+					// 相对于tralslate设置的绘制中心，arc圆形为0，0点，如未设置translate，中心为this.x,this.y
+					ctx.arc(0, 0, this.r, 0, 2 * Math.PI);
+					ctx.fillStyle = this.color();
+					ctx.fill();
+					ctx.restore();
+				}
+			}
+			
+			
+			// 1. 生成火花对象
+			let arr = [];
+			let speed = {
+				vx : 0,
+				vy : 0
+			};
+			let radius = 0;//半径
+			let a = 0.02;//加速度，0.02绘制的小球运动较为平滑
+			let alpha = 1;
+			
+			//true表运动到的大方向向右，否则向左
+			let dirX = true;
+			//true表示平抛运动，false表斜抛运动
+			let dirY = true;
+			
+			function createArc(num){
+				for(let i = 0; i < num; i++) {
+					radius = Math.random()*3 + 2;//最小2，最大6
+					dirX = Math.random() < 0.5 ? true : false;
+					dirY = Math.random() < 0.5 ? true : false;
+					speed.vx = dirX ? Math.random()*2 : -Math.random()*2;
+					speed.vy = dirY ? Math.random()*2 : -Math.random()*2;
+					arr.push(new Arc(width/2, height/2, radius, speed.vx, speed.vy, a, alpha));
+				}
+			}
+			createArc(20);
+			
+			// 2. 生成“木棍”对象，后续通过调用其draw方法即可将其绘制出来
+			let startX = width/2,
+				startY = 0,
+				// 注意，在绘制时，会将默认的绘制中心左上角设置为开始点（startX,startY）
+				// （endX，endY）是相对于绘制起点的位置而不是相对于屏幕的位置。
+				endX = 0;
+				endY = height/2;
+				lineWidth = 2;
+			let stick = new Stick(startX, startY, endX, endY, lineWidth);
+			stick.draw();//手动绘制一次
+			
+			setInterval(() => {
+				createArc(10);//添加形状
+				ctx.clearRect(0,0,width,height);//清空画布
+				// 1. 绘制“木棍”
+				stick.draw();
+				// 2. 绘制火花
+				for (let i in arr) {
+					if(arr[i].alpha > 0){
+						arr[i].move();
+						arr[i].draw();
+					}else{
+						arr.splice(i,1);
+					}
+				}
+			}, 50);
+		
+		
+			$(window).on("resize",()=>{
+				// 1.设置canvas画布的宽高
+				width = $(window).width();
+				height = $(window).height();
+				canvas[0].width = width;
+				canvas[0].height = height;
+				
+				// 2.根性“木棍”的位置
+				startX = width/2,
+				stick = new Stick(startX, startY, endX, endY, lineWidth);
+				stick.draw();//手动绘制一次
+			})
+		</script>
+	</body>
+</html>

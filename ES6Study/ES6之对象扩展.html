@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ES6对象的新特性</title>
+	</head>
+	<body>
+		<button class="btn">按钮</button>
+	</body>
+	<script>
+		// 1.对象扩展值Object.create()根据某对象创建新对象
+		// 可以实现复制对象的效果，新创建的对象与原对象的内存
+		// 地址不同,不会互相影响
+		let student1 = {
+			name:"小明",
+			age:12,
+			sex:"男",
+		}
+		
+		let student2 = Object.create(student1);
+		console.log("student1:");
+		console.log(student1);		
+		// 通过create复制的对象属性不在对象本身上面，而是在对象的,通过create（）方法
+		// 创建的对象的属性不可以直接通过xxx.propertyName = yyy;来修改,要通过defineProperty()方法修改,
+		// 并且属性要可写(writable)，普通对象通过xxx.propertyName = yyy即可修改，这个有所不同。
+		
+		// 原型__proto__上，原对象作为复制来的对象的protoType,两个对象互不影响
+		console.log("student2:");
+		console.log(student2);
+		
+		// Object.cearte()接收的参数除了要复制的对象外，还可以穿第二个参数，第二个参数是一个对象，
+		// 这个对象就是新对象自己的属性。
+		
+		let student3 = Object.create(student1,{
+			grade:{
+				value : "三年级一班",
+				writable: true,//表示不可写，为只读属性
+			},
+			number:{
+				value:12,
+				writable: true,//表示不可写，为只读属性,不设置默认只读
+			}
+		});
+		console.log("student3:");
+		console.log(student3);
+		
+		let btn = document.querySelector(".btn");
+		btn.onclick = ()=>{
+			// Object.defineProperty() 方法会直接在一个对象上定义一个新属性，
+			// 或者修改一个对象的现有属性，并返回此对象。
+				// 修改对象的属性值：Object。defineProperty(obj,propertName,valueObj);
+				// 接收参数为要修改的对象，以及修改得具体属性，最后是要修改为的值的对象，
+			Object.defineProperty(student3,"number",{
+				value: 4,
+				writable:true
+			});
+			console.log("修改number属性后的student3结果为：");
+			console.log(student3);
+		}
+		
+		// 为对象新增方法
+		let student4 = Object.create(student1);
+		Object.defineProperties(student4,{
+			showMsg:{
+				// 访问showMsg属性时的回调
+				get(){
+					console.log("get");
+				},
+				// 设置showMsg属性时的回调
+				set(input){
+					// 可通过参数拿到student4.showMsg = 4;输入的属性值（4）
+					console.log(input);
+					console.log("set");
+				},
+				
+			}
+		})
+	</script>
+</html>

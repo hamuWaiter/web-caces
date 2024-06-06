@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>缩放</title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			#canvas{
+				margin-top: 60px;
+				margin-left: 200px;
+				background-color: antiquewhite;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas" width="400" height="400"></canvas>
+		<script>
+			// scale(x, y):
+			// scale  方法可以缩放画布的水平和垂直的单位。两个参数都是实数，可以为负数，
+			// x 为水平缩放因子，y 为垂直缩放因子，如果比1小，会比缩放图形， 如果比1大
+			// 会放大图形。默认值为1， 为实际大小
+			function draw() {
+			  var ctx = document.getElementById('canvas').getContext('2d');
+			
+			// 参考点，用于对比经过缩放后同样大小的图形设置绘
+			// 制后大小的区别
+			  ctx.fillRect(60, 60, 10, 10);
+			  
+			  // draw a simple rectangle, but scale it.
+			  ctx.save();
+			  // scale只在回之前设置有效
+			  ctx.scale(6, 6);
+			  ctx.fillRect(0, 0, 10, 10);
+			  ctx.restore();
+			
+			  ctx.save();
+			  // mirror horizontally
+			  ctx.font = '48px serif';
+		  // 1. 通过scale实现rotateY(180deg)的效果：
+			  ctx.fillText('MDN', 140, 160);//原文本
+			  // 				||
+			  // 				\/
+			  // 设置scale中x方向缩放因子为-1:
+			  ctx.scale(-0.94, 1);
+			  //在canvas的镜像位置绘制一个文本:
+			  ctx.fillText('MDN', -140, 160);//镜像文本
+			  ctx.restore();
+			  
+		  // 2. 通过scale实现rotateX(180deg)的效果
+			  ctx.save();	
+			  ctx.font = '48px serif';
+			  ctx.scale(1, -1.06);
+			  //在canvas的镜像位置绘制一个文本:
+			  ctx.fillText('MDN', 140, -160);//镜像文本
+			  ctx.restore();
+			}
+			draw();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>canvas贝塞尔曲线三角形走廊</title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: #000000;
+				overflow: hidden;
+			}
+			.btn{
+				position: fixed;
+				z-index: 10;
+				right: 0;
+				bottom: 0;
+				width: 100px;
+				height: 100px;
+				background-color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas">暂不支持canvas，请更换高版本浏览器</canvas>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script src="js/bezier.js"></script>
+		<script>
+			// 五角星类的封装
+			class Pentagram{
+				constructor(x,y,r,pointNum,rgb,alpha){
+					// x、y、r为绘制中心和垂心距，pointNum表顶点数
+					// 五角星则五个顶点
+					this.x = x;
+					this.y = y;
+					this.r = r;
+					this.pointNum = pointNum;
+					this.rgb = rgb;
+					this.alpha = alpha;
+					this.outerDeg = 2*Math.PI/pointNum,
+					// this.innerDeg = (2*Math.PI/pointNum)/2,
+					this.innerDeg = Math.PI/pointNum,
+					//从π/2处的顶点位置开始绘制
+					this.currentDeg = Math.PI/2;
+					this.outerRadius = r,
+					// innerRadius = outerRadius*Math.sin(innerDeg/2)/Math.sin(innerDeg);//
+					this.innerRadius = r*Math.sin(Math.PI/pointNum/2)/Math.sin(Math.PI/pointNum);//
+				}
+				color() {
+					return `rgba(${this.rgb},${this.alpha})`
+				}
+				draw(){
+					ctx.save();
+					ctx.globalCompositeOperation = "lighter";
+					ctx.beginPath();
+					// 设置绘制中心
+					ctx.translate(this.x,this.y);
+					// 只能有一个起点，
+					ctx.moveTo(this.outerRadius*Math.cos(this.currentDeg),-this.outerRadius*Math.sin(this.currentDeg));
+					
+					for(let i = 0; i < this.pointNum; i++) {
+						this.currentDeg += this.innerDeg;
+						ctx.lineTo(this.innerRadius*Math.cos(this.currentDeg),-this.innerRadius*Math.sin(this.currentDeg));
+						this.currentDeg += this.innerDeg;
+						ctx.lineTo(this.outerRadius*Math.cos(this.currentDeg),-this.outerRadius*Math.sin(this.currentDeg));
+						
+					}
+					ctx.closePath();
+					ctx.lineWidth = 2;
+					ctx.strokeStyle = this.color();
+					ctx.stroke();
+					ctx.restore();
+				}
+			}
+		</script>
+		<script>
+			// 画布设置
+			let canvas = document.getElementById("myCanvas"),
+				ctx = canvas.getContext("2d"),
+				width = window.innerWidth,
+				height = window.innerHeight;
+			canvas.width = width;
+			canvas.height = height;
+			window.onresize = function() {
+				width = window.innerWidth,
+					height = window.innerHeight;
+				canvas.width = width;
+				canvas.height = height;
+			}
+
+			class Shape {
+				constructor(x, y, r, sideNum, rgb,alpha) {
+					this.x = x;
+					this.y = y;
+					this.r = r;
+					this.sideNum = sideNum;
+					this.deg = 2 * Math.PI / sideNum;
+					this.alpha = alpha;
+					// this.rgb = getRGB();
+					this.rgb = rgb;
+				}
+				color() {
+					return `rgba(${this.rgb},${this.alpha})`
+				}
+				draw() {
+					// x,y是绘制的中心，绘制三角形来说的话就是垂心
+					// radius是垂心到各点点的距离
+					ctx.save();
+					ctx.globalCompositeOperation = "lighter";
+					// ctx.translate(width/2,height/2);
+					ctx.translate(this.x, this.y);
+					ctx.beginPath();
+					ctx.moveTo(0, -this.r);
+					for (let i = 0; i < this.sideNum - 1; i++) {
+						ctx.lineTo(this.r * Math.sin(this.deg * (i + 1)), -this.r * Math.cos(this.deg * (i + 1)));
+					}
+					ctx.closePath();
+					ctx.strokeStyle = this.color();
+					ctx.stroke();
+					ctx.restore();
+				}
+			}
+			
+			function getRGB(){
+				return `${Math.random()*256},${Math.random()*256},${Math.random()*256}`
+			}
+			
+			function drawShape(x, y, radius, deg) {
+				// x,y是绘制的中心，绘制三角形来说的话就是垂心
+				// radius是垂心到各点点的距离
+				ctx.save();
+				// ctx.translate(width/2,height/2);
+				ctx.translate(x, y);
+				ctx.beginPath();
+				ctx.moveTo(0, -radius);
+				for (let i = 0; i < sideNum - 1; i++) {
+					ctx.lineTo(radius * Math.sin(deg * (i + 1)), -radius * Math.cos(deg * (i + 1)));
+				}
+				ctx.closePath();
+				ctx.strokeStyle = "red";
+				ctx.stroke();
+				ctx.restore();
+			}
+
+			// 随机生成贝塞尔的起点/终点
+			function getPositon(maxX, maxY) {
+				// 在屏幕最大宽高内生成贝塞尔起点或终点
+				let x = Math.floor(Math.random() * width);
+				let y = Math.floor(Math.random() * height);
+				return [x, y];
+			}
+
+			
+			let timer = null;
+			function fade(arr, callBack) { //第一条线完全消失执回调
+			
+				let len = arr.length;
+				// 更新动画状态
+				// 上一条贝塞尔曲线渐渐消失，完全消失后
+				// 渲染系一条贝塞尔曲线
+				timer = setInterval(() => {
+					ctx.clearRect(0,0,width,height);
+					arr.forEach((item, index) => {
+						// fade
+						if (item.alpha > 0) {
+							item.alpha -= 0.04;
+						} else if (index == len - 1 && item.alpha <= 0) {
+							clearInterval(timer);
+							timer = null;
+							// 动画结束
+							console.log("第一个贝塞尔消失！！");
+							if(callBack){
+								callBack();
+							}
+						}
+						item.draw();
+					})
+				},20);
+			}
+				
+			function show(arr, callBack) { //第一条线完全消失执回调
+				let len = arr.length;
+				// 更新动画状态
+				// 上一条贝塞尔曲线渐渐消失，完全消失后
+				// 渲染系一条贝塞尔曲线
+				timer = setInterval(() => {
+					ctx.clearRect(0,0,width,height);
+					arr.forEach((item, index) => {
+						// show
+						if (item.alpha < 1) {
+							item.alpha += 0.04;
+						} else if (index == len - 1 && item.alpha >= 1) {
+							clearInterval(timer);
+							timer = null;
+							// 动画结束
+							console.log("第二个贝塞尔绘制完成！");
+							if(callBack){
+								callBack();
+							}
+						}
+						item.draw();
+					})
+				},20);
+			}
+
+				//内部随机生成了贝塞尔点并通过贝塞尔点创建了正多边形，
+				// 最后返回正多边形数组
+			function getShapeArr(radius,sideNum,rgb,alpha=1,bezierNum) {
+				// 输入垂心距、边数、以及初始透明度，透明度默认为1
+				
+				// 清空上一条贝塞尔曲线
+				let shapeArr = [];
+
+				start = getPositon(width, height);
+				end = getPositon(width, height);
+
+				points = getPoints(bezierNum, start, controll1, controll2, end);
+				// 清除上一次的绘图
+				// 这一次的绘图
+				points.forEach((item, index) => {
+					// item.push(currentRadius);
+					
+					// 五角星，注意在使用时sideNum必须大于等于5
+					// let shape = new Pentagram(item[0], item[1], radius, sideNum, rgb,alpha);
+					
+					// 还是三角形最好看
+					let shape = new Shape(item[0], item[1], radius, sideNum, rgb,alpha);
+					shapeArr.push(shape);
+				})
+
+				return shapeArr;
+			}
+		</script>
+		<script>
+			let sideNum = 3,
+				radius = 30,
+				alpha1 = 1,
+				alpha2 = 0;
+			// 贝塞尔点获取
+			let points = [],
+				bezierNum = 300,
+				//贝塞尔点的起点数组 
+				start = [0, 0], //开始点可变，通过函数获取开始点
+				// 屏幕中心位置
+				controll1 = [width, 0],
+				controll2 = [0, height],
+				end = [width, height],
+				rgb = "255,0,0";
+				
+			// 渲染出第一个贝塞尔曲线
+			let firstArr = getShapeArr(radius,sideNum,rgb,alpha1,bezierNum);
+			for(let i of firstArr){
+				i.draw();
+			}
+			
+			// 点击屏幕绘制一条新的贝塞尔曲线
+			
+			// 隔一秒种自动切换
+			let autoPlay = setInterval(drawNewBezier,3000);
+			
+			function drawNewBezier(){
+				fade(firstArr,function() {
+					rgb = getRGB();
+					firstArr = getShapeArr(radius,sideNum,rgb,alpha2,bezierNum);;
+					show(firstArr)
+				})
+			}
+			
+			
+			
+			// 点击问题：
+			
+// 不让点
+			// let date = new Date();
+			// 	preSecond = 0,
+			// 	currentSecond = date.getTime(),
+			// 	costTime = 0;
+			// let waitPlay = null;
+			// $(window).on("click",function(){
+			// 	preSecond = currentSecond;
+			// 	date = new Date();
+			// 	currentSecond = date.getTime();
+			// 	costTime = currentSecond -preSecond;
+				
+			// 	console.log(costTime);
+				
+			// 	clearInterval(autoPlay);
+			// 	autoPlay = null;
+			// 	if(costTime < 600) {
+			// 		return;
+			// 	}else{
+			// 		drawNewBezier()
+			// 	}
+			// 	waitPlay = setTimeout(()=>{
+			// 		autoPlay = setInterval(drawNewBezier,3000);
+			// 	},2000);
+			// });
+			
+		</script>
+	</body>
+</html>

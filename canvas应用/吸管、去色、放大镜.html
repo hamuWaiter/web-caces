@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>imageData像素集</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			.box {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.canvas {
+				cursor: pointer;
+				border: 1px solid black;
+			}
+			.canvasItem{
+				width: 300px;
+			}
+			.color {
+				width: 300px;
+				height: 100px;
+				margin-top: 10px;
+				border: 1px solid black;
+			}
+			h3 {
+				line-height: 2em;
+			}
+
+			p {
+				width: 300px;
+				font-style: italic;
+			}
+
+			button {
+				border: none;
+				outline: none;
+				background-color: #000000;
+				color: white;
+				display: block;
+				margin: 10px 0;
+				padding: 4px 6px;
+				font-size: 20px;
+				border-radius: 6px;
+			}
+			span{
+				line-height: 2em;
+			}
+			canvas{
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div class="canvasItem">
+				<h3>取色器案例：</h3>
+				<canvas class="canvas" width="300" height="300"></canvas>
+				<p>getImageData读取图片上鼠标位置的rgba并改变div颜色并显示rgba值：</p>
+				<div class="color"></div>
+			</div>
+			<div class="canvasItem">
+				<h3>图片灰度和反相颜色:</h3>
+				<canvas class="canvas" width="300" height="300"></canvas>
+				<button id="invertbtn">invert(反相)</button>
+				<button id="grayscalebtn">grayscale(灰度)</button>
+			</div>
+			<div class="canvasItem">
+				<h3>图片放大镜:</h3>
+				<!-- 原图canvas： -->
+				<canvas class="canvas" width="300" height="300"></canvas>
+				<input type="checkbox" id="smoothbtn" checked="checked"/>
+				<span>Enable image smoothing</span>
+				<!-- 放大后图片显示canvas： -->
+				<canvas id="zoom" width="300" height="300"></canvas>
+			</div>
+		</div>
+
+	</body>
+	<script>
+		// ImageData对象中存储着canvas对象真实的像素数据，它包含以下几个只读属性：
+
+		// 1. width
+		// 图片宽度，单位是像素
+		// 2. height
+		// 图片高度，单位是像素
+		// 3. data
+		// data属性返回一个Uint8ClampedArray类型的一维数组，包含着RGBA格式的整型数据，范围在0至255之间（包括255）。
+		// Uint8ClampedArray包含高度 × 宽度 × 4 bytes(r g b a)数据，
+
+		// 例如，要读取图片中位于第50行，第200列像素点的R/G/B/A值的公式:
+		// imageData.data[((50 * (imageData.width * 4)) + (200 * 4)) + 0/1/2/3];
+
+		// 你可能用会使用Uint8ClampedArray.length属性来读取像素数组的大小（以bytes为单位）：
+		// numBytes = imageData.data.length;
+	</script>
+	<script>
+		// getImageData()这个方法会返回一个ImageData对象，它代表了画布区域的对象数据，此画布的四个角落
+		// 分别表示为(left, top), (left + width, top), (left, top + height), 
+		// 以及(left + width, top + height)四个点。这些坐标点被设定为画布坐标空间元素。
+
+		// ImageData实例:
+		// 颜色选择器：
+		// 在这个例子里面，我们会使用getImageData()去展示鼠标光标下的颜色。为此，我们要当前鼠标的位置，
+		// 记为layerX和layerY，然后我们去查询getImageData()给我们提供的在那个位置的像数数组里面的像素数据。
+		// 最后我们使用数组数据去设置背景颜色和<div>的文字去展示颜色值。
+		var img1 = new Image();
+		img1.src = 'images/onepeice.jpg';
+		var canvas = document.getElementsByClassName('canvas')[0];
+		var ctx = canvas.getContext('2d');
+		img1.onload = function() {
+			ctx.drawImage(img1, 0, 0);
+			img1.style.display = 'none';
+		};
+		var color = document.getElementsByClassName('color')[0];
+
+		function pick(event) {
+			var x = event.layerX;
+			var y = event.layerY;
+			var pixel = ctx.getImageData(x, y, 1, 1);
+			var data = pixel.data;
+			var rgba = 'rgba(' + data[0] + ',' + data[1] +
+				',' + data[2] + ',' + (data[3] / 255) + ')';
+			color.style.background = rgba;
+			color.textContent = rgba;
+		}
+		canvas.addEventListener('mousemove', pick);
+	</script>
+	<script>
+		// 图片灰度和反相颜色:
+
+		// 你可以用putImageData()方法去对场景进行像素数据的写入。
+		// 在这个例子里，我们遍历所有像素以改变他们的数值。然后我们将被修改的像素数组通过putImageData()
+		// 放回到画布中去。invert函数仅仅是去减掉颜色的最大色值255.grayscale函数仅仅是用红绿和蓝的平均值。
+		// 你也可以用加权平均，例如x = 0.299r + 0.587g + 0.114b这个公式。
+		var img2 = new Image();
+		img2.src = 'images/onepeice.jpg';
+		img2.onload = function() {
+			draw1(this);
+		};
+
+		function draw1(img2) {
+			var canvas = document.getElementsByClassName('canvas')[1];
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(img2, 0, 0);
+			img2.style.display = 'none';
+			var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			var data = imageData.data;
+
+			var invert = function() {
+				for (var i = 0; i < data.length; i += 4) {
+					data[i] = 255 - data[i]; // red
+					data[i + 1] = 255 - data[i + 1]; // green
+					data[i + 2] = 255 - data[i + 2]; // blue
+				}
+				ctx.putImageData(imageData, 0, 0);
+			};
+
+			var grayscale = function() {
+				for (var i = 0; i < data.length; i += 4) {
+					var avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+					data[i] = avg; // red
+					data[i + 1] = avg; // green
+					data[i + 2] = avg; // blue
+				}
+				ctx.putImageData(imageData, 0, 0);
+			};
+
+			var invertbtn = document.getElementById('invertbtn');
+			invertbtn.addEventListener('click', invert);
+			var grayscalebtn = document.getElementById('grayscalebtn');
+			grayscalebtn.addEventListener('click', grayscale);
+		}
+	</script>
+	<script>
+		// 缩放和反锯齿
+		// 在drawImage() 方法， 第二个画布和imageSmoothingEnabled 属性的帮助下，
+		// 我们可以放大显示我们的图片及看到详情内容。
+		
+		// 我们得到鼠标的位置并裁剪出距左和上5像素，距右和下5像素的图片。然后我们
+		// 将这幅图复制到另一个画布然后将图片调整到我们想要的大小。在缩放画布里，
+		// 我们将40×40像素的对原画布的裁剪调整为 300×300 。
+		
+		// 案例：图片放大镜
+		var img3 = new Image();
+		img3.src = 'images/onepeice.jpg';
+		img3.onload = function() {
+			draw2(this);
+		};
+		function draw2(img) {
+			var canvas = document.getElementsByClassName('canvas')[2];
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(img3, 0, 0);
+			img3.style.display = 'none';
+			var zoomctx = document.getElementById('zoom').getContext('2d');
+
+			var smoothbtn = document.getElementById('smoothbtn');
+			var toggleSmoothing = function(event) {
+				zoomctx.imageSmoothingEnabled = this.checked;
+				zoomctx.mozImageSmoothingEnabled = this.checked;
+				zoomctx.webkitImageSmoothingEnabled = this.checked;
+				zoomctx.msImageSmoothingEnabled = this.checked;
+			};
+			smoothbtn.addEventListener('change', toggleSmoothing);
+
+			var zoom = function(event) {
+				var x = event.layerX;
+				var y = event.layerY;
+				// 把原图canvas画布内容裁切放大后再会知道当前canvas中：
+				zoomctx.drawImage(canvas,
+					Math.abs(x - 20),
+					Math.abs(y - 20),
+					40, 40,
+					0, 0,
+					300, 300);
+			};
+
+			canvas.addEventListener('mousemove', zoom);
+		}
+	</script>
+</html>

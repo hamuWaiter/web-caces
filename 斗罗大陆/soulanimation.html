@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>斗罗大陆</title>
+		<link rel="stylesheet" type="text/css" href="css/soulanimation.css"/>
+	</head>
+	<body ondragstart="return false">
+		<div class="box">
+			<div class="img-container">
+				<ul class="imgs">
+					<div class="container">
+						<img src="img/soul/橙金色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/红色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/黑色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/黑色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/黑色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/黑色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/紫色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/紫色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/金色.png" >
+					</div>
+					<div class="container">
+						<img src="img/soul/金色.png" >
+					</div>
+					
+				</ul>
+			</div>
+		</div>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+		// 相册以及魂环的入场动画
+			//1.相册入场动画 
+			let $box = $(".imgs");//拖拽的对象
+			let $soulBox = $(".container");
+			let $soulCircle = $(".container img");
+			let picLen = $soulCircle.length;
+			let moveDis = $box.height();
+			
+			
+			for (let i = 0; i < picLen; i++) {
+				$($soulCircle[i]).css({
+					"transform": "scale(" + (4 - i* 0.4) + ") " + "rotateZ(" + i * 45 + "deg)",
+				})
+				$($soulBox[i]).css({
+					"top": moveDis,
+					"opacity" : 1,
+					// "transitionDelay": ( 2 - i / 6) + "s"
+					"transitionDelay": ( i / 4) + "s"
+				})
+			}
+			
+		</script>
+		<script>
+			// 2.拖拽
+			let timer = null;//用于拖拽惯性运动
+			let old = 0;
+			let runOverDis = 0;
+			
+			let originDisY = 0,
+				realY = 0;
+			$box.on("mousedown", function(e) {
+				$box.css({
+					"transform": "rotateX(-20deg) rotateY(" + originDisY + "deg)"
+				})
+				let pressPositionX = e.pageX, //鼠标按下的位置
+					changeDisX = 0;
+				$box.on("mousemove", function(e) {
+			
+					changeDisX = e.pageX - pressPositionX;
+					realY = originDisY + changeDisX;
+					$box.css({
+						"transform": "rotateX(-20deg) rotateY(" + realY + "deg)"
+					})
+				})
+				$box.on("mouseup", function() {
+					originDisY = realY;
+					$box.off("mousemove"); //解绑box的鼠标移动事件
+					
+					
+				})
+			
+				$box.on("mouseleave",function(){
+					originDisY = realY;
+					$box.off("mousemove"); //解绑box的鼠标移动事件
+				})
+			})
+		</script>
+	</body>
+</html>

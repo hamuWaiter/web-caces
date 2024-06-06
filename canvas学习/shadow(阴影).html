@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>canvas阴影</title>
+	</head>
+	<body>
+		<canvas id="canvas" width="600" height="300"></canvas>
+	</body>
+	<script>
+		// 阴影 Shadows:
+		// 1. shadowOffsetX = float
+		// shadowOffsetX 和 shadowOffsetY 用来设定阴影在 X 和 Y 轴的延伸距离，它们是不受变换矩阵所影响的。负值表示阴影会往上或左延伸，正值则表示会往下或右延伸，它们默认都为 0。
+		
+		// 2. shadowOffsetY = float
+		// shadowOffsetX 和 shadowOffsetY 用来设定阴影在 X 和 Y 轴的延伸距离，它们是不受变换矩阵所影响的。负值表示阴影会往上或左延伸，正值则表示会往下或右延伸，它们默认都为 0。
+		// 3. shadowBlur = float
+		// shadowBlur 用于设定阴影的模糊程度，其数值并不跟像素数量挂钩，也不受变换矩阵的影响，默认为 0。
+		// 4. shadowColor = color
+		// shadowColor 是标准的 CSS 颜色值，用于设定阴影颜色效果，默认是全透明的黑色。
+	</script>
+	<script>
+		// 例子：文字阴影
+		
+		function draw() {
+		  var ctx = document.getElementById('canvas').getContext('2d');
+		
+		  ctx.shadowOffsetX = 4;
+		  ctx.shadowOffsetY = 4;//阴影位置
+		  
+		  ctx.shadowBlur = 2;//模糊程度
+		  // 颜色
+		  ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+		 
+		  ctx.font = "40px Times New Roman";
+		  ctx.fillStyle = "Black";
+		  ctx.fillText("阴影文字", 100, 100);
+		}
+		draw();
+	</script>
+</html>

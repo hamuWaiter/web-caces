@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>打上花火</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				overflow: hidden;
+			}
+			#myCanvas{
+				background: url(./img/双子星.jpg) center center no-repeat;
+				background-size: 100%;
+				background-position: left top;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="myCanvas">请更换更高版本浏览器</canvas>
+		<audio id="bgm" src="./audio/打上花火-DAOKO.mp3" autoplay="autoplay" controlls="controlls"></audio>
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+			$(window).on("load",()=>{
+				// 页面加载完成播放背景音乐
+				let bgm = document.getElementById("bgm");
+				bgm.loop = "loop";
+				console.log(bgm);
+				
+				// bgm.play();//不知为何会报错:
+				
+				// Uncaught (in promise) DOMException: play() failed because
+				// the user didn't interact with the document first.
+				
+			});
+		</script>
+		<script>
+			let canvas = $("#myCanvas"),
+				ctx = canvas[0].getContext("2d"),
+				width = $(window).width(),
+				// 图片为：1080*1920
+				height = (1080*width)/1920;
+
+			canvas[0].width = width;
+			canvas[0].height = height;
+
+			
+			// “花火”类
+			class Arc {
+				constructor(x, y, r, vx, vy, a, alpha) {//vy初始值最好为加速度a的帧数倍
+					// x,y为绘制位置，r为半径
+					// vx,vy是平抛/斜运动的初始速度
+					// a为垂直方向的加速度，a足够小的话可以使两个绘制点看起来是
+					// 连续的，如：
+						// vx=1，vy=-1；a=0.02；//斜抛
+						// vx=1，vy=0；a=0.02；//平抛
+						// 以上参数绘制的曲线看起来相当平滑
+						
+						// 对于向上的斜抛运动，vy初始速度为负，vx与平抛运动一致
+						// 对于平抛运动，vx设置为30，vy设置为0
+					// alpha是透明度
+					this.x = x;
+					this.y = y;
+					this.r = r;
+					this.vx = vx; //水平速度
+					this.vy = vy; //垂直速度
+					this.a = a; //竖直方向的加速度
+					
+					this.rgb = `255,${Math.floor(Math.random()*200)},0`;
+					this.alpha = alpha;
+				}
+				move() {
+					this.vy += this.a; //竖直速度等于gt，
+					this.x += this.vx;
+					this.y += this.vy;
+					this.alpha -= 0.02;
+				}
+				color(){
+					return `rgba(${this.rgb},${this.alpha})`
+				}
+				draw() {
+					ctx.save();
+					ctx.globalCompositeOperation = "lighter";
+					ctx.translate(this.x, this.y);
+					ctx.beginPath();
+					// 相对于tralslate设置的绘制中心，arc圆形为0，0点，如未设置translate，中心为this.x,this.y
+					ctx.arc(0, 0, this.r, 0, 2 * Math.PI);
+					ctx.fillStyle = this.color();
+					ctx.fill();
+					ctx.restore();
+				}
+			}
+			
+			
+			// 1. 生成火花对象
+			let arr = [
+				[],//右边的烟花
+				[]//左边的烟花
+			];
+			let tem = [];
+			let positionX = width*0.6725;
+			let positionY = height*0.5066;
+			let speed = {
+				vx : 0,
+				vy : 0
+			};
+			let radius = 0;//半径，初始为0，创建实例时再重新赋值
+			let a = 0.02;//加速度，0.02绘制的小球运动较为平滑
+			let alpha = 1;
+			
+			//true表运动到的大方向向右，否则向左
+			let dirX = true;
+			//true表示平抛运动，false表斜抛运动
+			let dirY = true;
+			
+			function createArc( num,flag){
+				if(flag){
+					for(let i = 0; i < num; i++) {
+						positionX = width*0.6725;
+						positionY = height*0.5066;
+						radius = Math.random()*5 + 2;//最小2，最大6
+						dirX = Math.random() < 0.5 ? true : false;
+						dirY = Math.random() < 0.5 ? true : false;
+						speed.vx = dirX ? Math.random()*2 : -Math.random()*2;
+						// speed.vy = dirY ? Math.random()*2 : -Math.random()*2;
+						speed.vy = dirY ? Math.random()*2 : -Math.random()*2;
+						arr[0].push(new Arc(positionX, positionY, radius, speed.vx, speed.vy, a, alpha));
+					}
+				}else{
+					for(let i = 0; i < num; i++) {
+						positionX = width*0.2799;
+						positionY = height*0.750;
+						radius = Math.random()*5 + 2;//最小2，最大6
+						dirX = Math.random() < 0.5 ? true : false;
+						dirY = Math.random() < 0.5 ? true : false;
+						speed.vx = dirX ? Math.random()*2 : -Math.random()*2;
+						speed.vy = dirY ? Math.random()*2 : -Math.random()*2;
+						arr[1].push(new Arc(positionX, positionY, radius, speed.vx, speed.vy, a, alpha));
+					}
+				}
+				
+			}
+			createArc(20,true);
+			createArc(20,false);
+			
+			setInterval(() => {
+				createArc(2,true);//添加形状
+				createArc(2,false);//添加形状
+				ctx.clearRect(0,0,width,height);//清空画布
+				//  绘制火花
+				arr.forEach((item,index)=>{
+					for (let i in item) {
+						if(item[i].alpha > 0){
+							item[i].move();
+							item[i].draw();
+						}else{
+							item.splice(i,1);
+						}
+					}
+				})
+			}, 50);
+		
+		
+			$(window).on("resize",()=>{
+				// 1.设置canvas画布的宽高
+				width = $(window).width();
+				height = (1080*width)/1920;;
+				canvas[0].width = width;
+				canvas[0].height = height;
+			})
+		</script>
+	</body>
+</html>

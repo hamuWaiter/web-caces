@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG二次贝塞尔曲线</title>
+	</head>
+	<body>
+		<?xml version="1.0" standalone="no"?>
+		
+		<svg width="190px" height="160px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+			<!-- Q：
+			二次贝塞尔曲线 -->
+			
+			<!-- 只需要一个控制点，用来确定起点和终点的曲线斜率 -->
+			<path d="M10 80 Q 95 10 180 80" stroke="black" fill="transparent"/>
+			
+			<!-- 就像三次贝塞尔曲线有一个S命令，二次贝塞尔曲线有一个差不多的T命令，
+			可以通过更简短的参数，延长二次贝塞尔曲线。
+			
+			快捷命令T会通过前一个控制点，推断出一个新的控制点。
+			这意味着，在你的第一个控制点后面，可以只定义终点，
+			就创建出一个相当复杂的曲线。需要注意的是，T命令前面
+			必须是一个Q命令，或者是另一个T命令，才能达到这种效果。
+			如果T单独使用，那么控制点就会被认为和终点是同一个点，
+			所以画出来的将是一条直线。 -->
+			<path d="M10 80 Q 52.5 10 95 80 T 180 80" stroke="black" fill="transparent"/>
+		</svg>
+	</body>
+</html>

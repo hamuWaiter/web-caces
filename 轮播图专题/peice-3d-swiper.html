@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>3D旋转轮播2</title>
+		<link rel="stylesheet" href="css/swiper04.css">
+	</head>
+	<body>
+
+		<div class="box">
+			<div class="container">
+				<!-- 图片盒子 -->
+
+			</div>
+			<div class="controller">
+				<span class="next"></span>
+				<span class="play-btn"></span>
+				<span class="pre"></span>
+			</div>
+		</div>
+
+		<script src="js/jquery-3.4.1.js"></script>
+		<script>
+			let $container = $(".container"),
+				num = 10,
+				totalWidth = $container.width(),
+				totalHeight = $container.height(),
+				width = Math.floor(totalWidth / num); //盒子总高度
+
+
+			let startArr = [];//初始旋转角
+			// 1.生成四张图片
+			for (let i = 0; i < 4; i++) {
+				// startArr用于记录每一张图片绕着X轴的旋转角度
+				startArr.push(i*90);
+				// 2.单独一张图片的相关设置
+				for (let j = 0; j < num; j++) {
+					let $el = $("<div class='item'></div>");
+					$el.css({
+						"height": "100%",
+						"width": width + "px",
+						"backgroundImage": "url('img/swiper04/"+(i+1)+".jpg')",
+						"backgroundRepeat": "no-repeat",
+						"backgroundSize" : totalWidth+"px "+totalHeight+"px",
+						"backgroundPosition": "-" + j * width + "px 0px",
+						"position" : "absolute",
+						"left" : j*(width - 1) + "px",
+						//这是咋回事儿要减一拼图才连续
+						"transform" : "rotateX("+i*90+"deg) translateZ("+(totalHeight / 2)+"px)",
+						"transition" : "transform 0.8s ease",
+						"transitionDelay" : j*0.1 + "s"
+					})
+					$container.append($el);
+				}
+			}
+			
+			// 3.动画
+			let $pre = $(".pre"),
+				$playControll = $(".play-btn"),
+				$next = $(".next"),
+				imgUrl = "pause";//存储当前空间的图标路径字符串，
+				
+			let $items = $container.find(".item"),//所有小图片
+				temArr = [],
+				temIdx = 0,
+				finalArr = [];//所有图片的最终分组
+			
+			//3.1  对所有图片块进行分组 
+			
+			for (let i = 0; i < 4; i++) {
+				// 2.单独一张图片的相关设置
+				for (let j = 0; j < num; j++) {
+					temIdx = i*num + j;
+					temArr.push($items[temIdx]);
+				}
+				finalArr.push(temArr);
+				temArr = [];
+			}
+			
+			
+			// 3.2 自动切换你
+			let timer = setInterval(()=> {
+				move(0);
+			},3000);
+			
+			// 3.3 手动切换
+			$next.on("click", () => {
+				clearInterval(timer);
+				timer = null;
+				imgUrl = "pause";
+				$playControll.css({
+					"backgroundImage" : "url('img/public/"+imgUrl+".svg')"
+				});
+				$playControll.fadeIn(400);//重启自动轮播按钮出现
+				move(0);
+			});
+			$pre.on("click", () => {
+				clearInterval(timer);
+				timer = null;
+				imgUrl = "pause";
+				$playControll.css({
+					"backgroundImage" : "url('img/public/"+imgUrl+".svg')"
+				});
+				$playControll.fadeIn(400);
+				move(-1);
+			});
+			
+			$playControll.on("click",()=>{
+				imgUrl = "play";
+				$playControll.css({
+					"backgroundImage" : "url('img/public/"+imgUrl+".svg')"
+				});
+				$playControll.fadeOut(1000);
+				//重启定时器
+				timer = setInterval(()=> {
+					move(0);
+				},3000);
+			});
+			
+			
+			
+			function move(mode) {
+				// mode为0则切换下一张，否则为切换上一张
+				for (let i = 0; i < 4; i++) {
+					mode ? startArr[i] += 90 : startArr[i] -= 90;
+					// 2.单独一张图片的相关设置
+					for (let j = 0; j < num; j++) {
+						$(finalArr[i][j]).css({
+							"transform" : "rotateX("+startArr[i]+"deg) translateZ("+(totalHeight / 2)+"px)",
+						})
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

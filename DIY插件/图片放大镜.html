@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>图片放大镜</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		span,img{
+			display: block;
+		}
+		.box{
+			width: 100%;
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.container{
+			display: flex;
+			align-items: center;
+		}
+		.container .small-img,
+		.container .big-img{
+			position: relative;
+		}
+		.container .small-img{
+			width: 400px;
+			overflow: hidden;
+			margin-right: 60px;
+			z-index: 100;
+		}
+		.container .big-img{
+			width: 300px;
+			height: 300px;
+			overflow: hidden;
+		}
+		.preview-rect{
+			width: 40px;
+			height: 40px;
+			background-color: orange;
+			opacity: 0.8;
+			position: absolute;
+			top: 0;
+			left: 0;
+			transform: translate(-50%,-50%);
+		}
+		.small-img img{
+			width: 400px;
+		}
+		.big-img img{
+			width: 1600px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="container">
+			<div class="small-img">
+				<img src="images/4.jpg" >
+			</div>
+			<div class="big-img">
+				<img src="images/4.jpg" >
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		let $preview = $(".small-img"),
+			$bigImg = $(".big-img img");
+		$preview.on("mouseenter",function(e){
+			// 在鼠标位置生成一个预览区域
+			let recTop = e.pageY - $preview.offset().top;
+			let recLeft = e.pageX - $preview.offset().left;
+			// 挂载元素
+			let $rect = $("<span class='preview-rect'></span>");
+			$preview.append($rect);
+			let $previewArea = $(".preview-rect");
+			$previewArea.css({
+				"top":recTop + $previewArea.width()/2 + "px",
+				"left": recLeft + $previewArea.width()/2 + "px",
+			})
+			// 边界条件
+			let minTop = $previewArea.height()/2;
+			let minLeft = $previewArea.width()/2;
+			let maxTop = $preview.height() - $previewArea.height()/2;
+			let maxLeft = $preview.width() - $previewArea.width()/2;
+			// 方块移动
+			$preview.on("mousemove",function(e){
+				recTop = e.pageY - $preview.offset().top;
+				recLeft = e.pageX - $preview.offset().left;
+				if(recTop >= minTop && recTop <= maxTop){
+					if(recLeft >= minLeft && recLeft <= maxLeft){
+						$previewArea.css({
+							"top": recTop + "px",
+							"left": recLeft + "px"
+						});
+						$bigImg.css({
+							"top": -recTop*4 + "px",
+							"left": -recLeft*4 + "px"
+						})
+					}
+				}
+			})
+		}).on("mouseleave",function(){
+			$preview.children(".preview-rect").remove();
+		})
+	</script>
+</body>
+</html>

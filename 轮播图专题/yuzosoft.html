@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<title>魔女的夜宴过场动画</title>
+		<style>
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			ul li{
+				list-style: none;
+			}
+			.box{
+				width: 100%;
+				height: 100vh;
+				background-color: pink;
+			}
+			
+			.picBox{
+				position: relative;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			
+			.pic{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			.pic li{
+				position: absolute;
+				transition: all 1s ease;
+				transform:rotateZ(45deg) rotateY(90deg);
+			}
+			.pic li div{
+				transform: rotateZ(-45deg);
+			}
+			.pic .on{
+				transform: rotateZ(45deg) rotateY(0deg);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<!-- 轮播盒子-->
+			<div class="picBox"></div>
+		</div>
+	</body>
+	<script src="js/jquery-3.4.1.js"></script>
+	<script>
+		// 1. 图片切片参数
+		let	boxWidth = $(window).width()*0.8,
+			boxHeight = $(window).height()*0.9,//图片大小
+			item_w = 100,//块大小
+			item_h = 100;
+			num_x = Math.round(boxWidth/item_w) + 1,
+			num_y = Math.round(boxHeight/item_h) + 1;//块数量
+		
+		// 2. 创建轮播图片并插入到dom中
+		let $picBox = $(".picBox");
+		let urlArr = [],//已有图片
+			url = 1,//当前图片索引
+			number = 8,
+			currentNum = 0;
+			
+		// 2.1 循环创建图片
+		for(let i = 0;i < 20; i++) {
+			createPic($picBox);
+			if(currentNum == number){
+				console.log(urlArr);
+				break;
+			}
+		}
+		// 2.2 图片切片
+		function createPic(appendEl) {
+			// 随机获取一个图片索引
+			url = getRandom(15,1);
+			
+			// 判断是否已有该图片
+			if(!urlArr.includes(url)){
+				urlArr.push(url);
+				currentNum += 1;
+			}else{
+				return;
+			}
+			// 1.1 生成块item
+			let $picEl = $('<ul class="pic"></ul>');
+			$picEl.width(boxWidth).height(boxHeight);
+			
+			for(let i = 0; i < num_y; i++) {
+				for(let j = 0; j < num_x; j++) {
+					let $elP = $("<li></li>"),
+						$elC = $("<div></div>");
+					
+					$elP.css({
+						"width" : item_w + "px",
+						"height" : item_h + "px",
+						"left" : j*item_w + "px",
+						"top" : i*item_h + "px",
+						"transitionDelay" : (i+j)*0.04 + "s"
+					});
+					$elC.css({
+						"width" : (item_w + 1) + "px",
+						"height" : (item_h + 1) + "px",
+						"backgroundImage" : `url(yuzosoft/${url}.jpg)`,
+						"backgroundSize" : boxWidth + "px ",
+						"backgroundPosition" : `${-j*item_w}px ${-i*item_h}px`,
+					});
+					$elP.append($elC);
+					$picEl.append($elP);
+				}
+			}
+			$(appendEl).append($picEl);
+		}
+		
+		function getRandom(max, min){
+			// 传入期望随机数的最大值和最小值
+			return Math.round(Math.random()*(max-min)) + min;
+		}
+		
+		// 3. 播放
+		let item = $(".pic");
+		let idx = 0;
+		$(item[idx]).children("li").toggleClass("on");
+		function play(){
+			// 隐藏上一张图
+			$(item[idx]).children("li").toggleClass("on");
+		
+			if(idx < number - 1){
+				// 索引加一
+				idx += 1;
+			}else{
+				idx = 0;
+			}
+			// 出现当前图片
+			$(item[idx]).children("li").toggleClass("on");
+		}
+		
+		$(window).on("load",()=>{
+			setInterval(play,3000);
+		})
+	</script>
+</html>
